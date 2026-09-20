@@ -1,6 +1,6 @@
 # Cybersecurity mod — catalog and reference notes
 
-**Scope:** one combined code mod in `DLLMods\Cybersecurity`: the C# incident system at the top level and the data mod in `Data\` (registered by the code at startup, see docs\packaging.md). Furniture was abandoned. There is no SOC-analyst specialization from data: custom specs are rejected by the game, so the Cybersecurity specialisation is added by the code (docs\incidents.md).
+**Scope:** one combined code mod in `DLLMods\Cybersecurity`: the C# incident system at the top level and the data mod in `Data\` (registered by the code at startup, see docs\packaging.md). Furniture was abandoned. There is no SOC-analyst specialization: custom specs are rejected by the game for data mods, and a specialisation added by code cannot be hired (no salary entry for it), so incident response scales with the vanilla Support specialisation (docs\incidents.md).
 
 ## Vanilla names (extracted from `Software Inc_Data\resources.assets`, game build 2018.4.36)
 
