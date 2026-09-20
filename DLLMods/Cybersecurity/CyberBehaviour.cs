@@ -47,21 +47,29 @@ namespace CybersecurityMod
         }
     }
 
-    // An incident currently being handled.
-    internal class Incident
+    // An incident read from a save, waiting for the game to finish loading before it becomes an IncidentWork again.
+    internal class IncidentRecord
     {
         public int Threat;
         public int StartDay;
         public int DeadlineDay;
-        public float Work;
-        public float Progress;
+        public float Progress;      // 0..1
         public bool Warned;
+        public List<string> Teams;
+
+        // (created here, not in a field initializer: the game's try/catch injector mistakes a '(' at class level for a method)
+        public IncidentRecord()
+        {
+            Teams = new List<string>();
+        }
     }
 
     public class CyberBehaviour : ModBehaviour
     {
-        // The Service-role specialisation this mod adds. Staff with levels in it respond faster.
-        public const string SpecName = "Cybersecurity";
+        // The vanilla Service specialisation that incident response scales with. A new specialisation cannot be added:
+        // the game keeps a private salary table for Service specialisations and throws for any name it does not know
+        // (hire window, new employees, HR hiring), and a mod cannot reach that table without reflection.
+        public const string SpecName = "Support";
 
         // ---------------- tuning ----------------
         private const float BaseChancePerDay = 0.0012f;     // before the user/reputation factors
@@ -69,7 +77,7 @@ namespace CybersecurityMod
         private const float UsersScale = 2000f;             // active users at which the user factor reaches log10(2)
         private const int MinDaysBetweenIncidents = 10;
         private const int MaxActiveIncidents = 3;
-        private const float BaseResponsePerDay = 0.5f;      // what an untrained company manages on its own
+        private const string IncidentTeamKey = "IncidentTeam";   // key for the game's default-team setting, like "InternalLawsuitTeam"
         private const float MinDamage = 15000f;
         private const float DamagePerUser = 0.10f;
         private const float MaxDamage = 3000000f;
@@ -82,10 +90,29 @@ namespace CybersecurityMod
 
         private static readonly ThreatDef[] Threats = ThreatDef.CreateAll();
 
-        private List<Incident> _incidents = new List<Incident>();
+        private List<IncidentWork> _incidents = new List<IncidentWork>();
+        private List<IncidentRecord> _pending = new List<IncidentRecord>();   // read from a save, not yet in the game
         private int _dayCounter;
         private int _lastIncidentDay = -1000;
         private bool _loadedThisGame;
+        private bool _detachedForSave;
+
+        // A method, not a property: the game's try/catch injector wraps the block after the last '(' at class level
+        // (here the field initializers above), and a property block there breaks the compile.
+        public int GetDayCounter()
+        {
+            return _dayCounter;
+        }
+
+        internal static string ThreatName(int threat)
+        {
+            return threat >= 0 && threat < Threats.Length ? Threats[threat].Name : "Cyber incident";
+        }
+
+        internal static float ThreatWork(int threat)
+        {
+            return threat >= 0 && threat < Threats.Length ? Threats[threat].Work : 1f;
+        }
 
         // ---------------- lifecycle ----------------
 
@@ -98,7 +125,6 @@ namespace CybersecurityMod
             RegisterBundledData();
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            AddSpecialisation();
             TimeOfDay.OnDayPassed += OnDayPassed;
             GameSettings.GameReady += OnGameReady;
         }
@@ -108,7 +134,7 @@ namespace CybersecurityMod
             TimeOfDay.OnDayPassed -= OnDayPassed;
             GameSettings.GameReady -= OnGameReady;
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            RemoveSpecialisation();
+            RemoveOpenIncidents();
             UnregisterBundledData();
             if (Current == this) Current = null;
         }
@@ -255,48 +281,39 @@ namespace CybersecurityMod
             SaveSetting("Frequency", value);
         }
 
-        // ---------------- the Cybersecurity specialisation ----------------
-
-        // Service staff specialisations are a compiled list (Support, Marketing, Law, Accounting).
-        // Adding a name to it makes the specialisation appear in hiring and education.
-        private static void AddSpecialisation()
-        {
-            string[] specs = Employee.ServiceSpecs;
-            if (specs == null) return;
-            for (int i = 0; i < specs.Length; i++)
-            {
-                if (specs[i] == SpecName) return;
-            }
-            string[] extended = new string[specs.Length + 1];
-            specs.CopyTo(extended, 0);
-            extended[specs.Length] = SpecName;
-            Employee.ServiceSpecs = extended;
-        }
-
-        private static void RemoveSpecialisation()
-        {
-            string[] specs = Employee.ServiceSpecs;
-            if (specs == null) return;
-            List<string> kept = new List<string>();
-            for (int i = 0; i < specs.Length; i++)
-            {
-                if (specs[i] != SpecName) kept.Add(specs[i]);
-            }
-            if (kept.Count != specs.Length) Employee.ServiceSpecs = kept.ToArray();
-        }
-
         // ---------------- game hooks ----------------
 
         private void OnGameReady(object sender, EventArgs e)
         {
-            // A save that had incidents restored them in Deserialize before this point; a new game starts clean.
-            if (!_loadedThisGame)
+            try
             {
+                // Whatever was open belongs to the game that just ended.
                 _incidents.Clear();
-                _dayCounter = 0;
-                _lastIncidentDay = -1000;
+                _detachedForSave = false;
+
+                if (_loadedThisGame)
+                {
+                    // Deserialize ran before the company existed, so the saved incidents become work items now.
+                    RestoreIncidents(GameSettings.Instance);
+                }
+                else
+                {
+                    _pending.Clear();
+                    _dayCounter = 0;
+                    _lastIncidentDay = -1000;
+                }
+                _loadedThisGame = false;
             }
-            _loadedThisGame = false;
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogWarning("Cybersecurity mod: " + ex);
+            }
+        }
+
+        // Only used to put the incidents back after a save (see Serialize).
+        private void Update()
+        {
+            if (_detachedForSave) AttachAll();
         }
 
         private void OnDayPassed(object sender, EventArgs e)
@@ -317,7 +334,7 @@ namespace CybersecurityMod
             if (gs == null || gs.MyCompany == null || TimeOfDay.Instance == null) return;
 
             _dayCounter++;
-            ResolveIncidents(gs);
+            CheckIncidents(gs);
             if (Enabled) MaybeStartIncident(gs);
         }
 
@@ -394,83 +411,124 @@ namespace CybersecurityMod
         private void StartIncident(GameSettings gs, int threat)
         {
             ThreatDef def = Threats[threat];
-            Incident incident = new Incident();
-            incident.Threat = threat;
-            incident.StartDay = _dayCounter;
-            incident.DeadlineDay = _dayCounter + def.DeadlineDays;
-            incident.Work = def.Work;
-            incident.Progress = 0f;
-            incident.Warned = false;
+            IncidentWork incident = new IncidentWork(threat, _dayCounter, _dayCounter + def.DeadlineDays);
+            gs.MyCompany.AddWorkItem(incident);
+            gs.ApplyDefaultTeams(incident, IncidentTeamKey);
             _incidents.Add(incident);
             _lastIncidentDay = _dayCounter;
+            Log("incident started: " + def.Name + " on day " + _dayCounter + ", deadline day " + incident.DeadlineDay + " (" + _incidents.Count + " open)");
 
-            int specialists;
-            ResponseCapacity(gs, out specialists);
-            string team;
-            if (specialists > 0)
-            {
-                team = "Your " + specialists + " Cybersecurity specialist" + (specialists == 1 ? "" : "s") + " are on it.";
-            }
-            else
-            {
-                team = "You have no Cybersecurity specialists. Train Service staff in Cybersecurity!";
-            }
-
-            Popup(def.Intro + " You have " + def.DeadlineDays + " days to respond. " + team, PopupManager.NotificationSound.Issue, 1f);
+            Popup(def.Intro + " You have " + def.DeadlineDays + " days to respond. Assign a Service team to it; staff with Support training work fastest.", PopupManager.NotificationSound.Issue, 1f);
         }
 
-        // Response points per day: what the company manages alone, plus the level of every available Cybersecurity specialist.
-        private float ResponseCapacity(GameSettings gs, out int specialists)
+        // Once a day: fail the incidents that are past their deadline and warn about the ones running late.
+        // The deadline is judged from the mod's own list, not from whether the work item is still in the company, so an
+        // incident can never slip past it (for instance one that was briefly taken out of the company for a save).
+        private void CheckIncidents(GameSettings gs)
         {
-            specialists = 0;
-            float capacity = BaseResponsePerDay;
-            if (gs.sActorManager == null) return capacity;
-
-            foreach (Actor actor in gs.sActorManager.Actors)
-            {
-                if (actor == null || !actor.IsEmployee() || actor.employee == null) continue;
-                if (actor.SickDays > 0) continue;
-
-                int level = actor.employee.GetSpecialization(Employee.EmployeeRole.Service, SpecName, actor);
-                if (level > 0)
-                {
-                    capacity += level;
-                    specialists++;
-                }
-            }
-            return capacity;
-        }
-
-        private void ResolveIncidents(GameSettings gs)
-        {
-            if (_incidents.Count == 0) return;
-
-            int specialists;
-            float capacity = ResponseCapacity(gs, out specialists);
+            AdoptOrphans(gs);
 
             for (int i = _incidents.Count - 1; i >= 0; i--)
             {
-                Incident incident = _incidents[i];
+                IncidentWork incident = _incidents[i];
                 ThreatDef def = Threats[incident.Threat];
-                incident.Progress += capacity;
+                int percent = (int)(100f * incident.Progress);
+                Log("day " + _dayCounter + ": " + def.Name + " is " + percent + "% done, deadline day " + incident.DeadlineDay);
 
-                if (incident.Progress >= incident.Work)
+                if (incident.Progress >= 1f)
                 {
-                    int days = _dayCounter - incident.StartDay;
-                    Popup(def.Name + " contained after " + days + " day" + (days == 1 ? "" : "s") + ". Good response.", PopupManager.NotificationSound.Good, 0.6f);
-                    _incidents.RemoveAt(i);
+                    IncidentContained(incident);
+                    RemoveWorkItem(incident);
                 }
                 else if (_dayCounter >= incident.DeadlineDay)
                 {
-                    FailIncident(gs, def);
                     _incidents.RemoveAt(i);
+                    Log(def.Name + " missed its deadline at " + percent + "%: launching the lawsuit");
+                    try
+                    {
+                        FailIncident(gs, def);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log("could not launch the lawsuit: " + ex);
+                    }
+                    RemoveWorkItem(incident);
                 }
-                else if (!incident.Warned && incident.DeadlineDay - _dayCounter <= WarnDaysBeforeDeadline && incident.Progress < incident.Work * 0.6f)
+                else if (!incident.Warned && incident.DeadlineDay - _dayCounter <= WarnDaysBeforeDeadline && incident.Progress < 0.6f)
                 {
                     incident.Warned = true;
-                    int percent = (int)(100f * incident.Progress / incident.Work);
-                    Popup(def.Name + " response is only " + percent + "% done and the deadline is close. More Cybersecurity staff would speed it up.", PopupManager.NotificationSound.Warning, 0.8f);
+                    Popup(def.Name + " response is only " + percent + "% done and the deadline is close. Assign more Service staff, ideally with Support training.", PopupManager.NotificationSound.Warning, 0.8f);
                 }
+            }
+        }
+
+        private static void RemoveWorkItem(IncidentWork incident)
+        {
+            try
+            {
+                incident.Kill(false);
+            }
+            catch (Exception ex)
+            {
+                Log("could not remove the incident work item: " + ex);
+            }
+        }
+
+        // An IncidentWork in the company that the mod is not tracking (its deadline would never be checked) is taken back over.
+        private void AdoptOrphans(GameSettings gs)
+        {
+            List<IncidentWork> found = new List<IncidentWork>();
+            lock (gs.MyCompany.WorkItems)
+            {
+                foreach (WorkItem item in gs.MyCompany.WorkItems)
+                {
+                    IncidentWork incident = item as IncidentWork;
+                    if (incident != null && !_incidents.Contains(incident)) found.Add(incident);
+                }
+            }
+            for (int i = 0; i < found.Count; i++)
+            {
+                _incidents.Add(found[i]);
+                Log("took over an incident work item that was not being tracked: " + ThreatName(found[i].Threat));
+            }
+        }
+
+        // Called by IncidentWork when its progress bar fills up.
+        internal void IncidentContained(IncidentWork incident)
+        {
+            _incidents.Remove(incident);
+            int days = _dayCounter - incident.StartDay;
+            Log(ThreatName(incident.Threat) + " contained after " + days + " day(s)");
+            Popup(ThreatName(incident.Threat) + " contained after " + days + " day" + (days == 1 ? "" : "s") + ". Good response.", PopupManager.NotificationSound.Good, 0.6f);
+        }
+
+        // Called by IncidentWork when the player cancels it: same outcome as running out of time.
+        internal void IncidentAbandoned(IncidentWork incident)
+        {
+            if (!_incidents.Remove(incident)) return;
+            GameSettings gs = GameSettings.Instance;
+            Log(ThreatName(incident.Threat) + " was cancelled: launching the lawsuit");
+            if (gs != null && gs.MyCompany != null) FailIncident(gs, Threats[incident.Threat]);
+        }
+
+        // Called by IncidentWork when the game removes it for any other reason (nothing to fail, nothing to contain).
+        internal void IncidentRemoved(IncidentWork incident)
+        {
+            if (_incidents.Remove(incident)) Log(ThreatName(incident.Threat) + " work item was removed by the game");
+        }
+
+        // Take every open incident out of the game (mod switched off, or a script reload).
+        private void RemoveOpenIncidents()
+        {
+            try
+            {
+                List<IncidentWork> open = new List<IncidentWork>(_incidents);
+                _incidents.Clear();
+                for (int i = 0; i < open.Count; i++) open[i].Kill(false);
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogWarning("Cybersecurity mod: could not remove open incidents: " + ex);
             }
         }
 
@@ -480,6 +538,7 @@ namespace CybersecurityMod
             double users = ActiveUsers(gs.MyCompany);
             double amount = def.Damage * Math.Min(MaxDamage, Math.Max(MinDamage, users * DamagePerUser));
             gs.LaunchSuit(new GameSettings.Lawsuit(def.SubjectKey, amount, def.Difficulty), false);
+            Log("lawsuit queued: " + def.SubjectKey + ", " + (int)amount + " (users " + (int)users + ")");
             Popup(def.Name + " was not contained in time. Affected customers are suing.", PopupManager.NotificationSound.Issue, 1f);
         }
 
@@ -501,46 +560,108 @@ namespace CybersecurityMod
 
         // ---------------- saving ----------------
 
+        // The game writes Company.WorkItems by type name and cannot read back a type from a mod assembly, so an
+        // IncidentWork must not be in the company while the save is encoded. The game calls this after it has built
+        // the company data (which holds the live company) and before it encodes the file, all in one call on the
+        // main thread. So the incidents are taken out of the company here and put back on the next frame (Update).
+        // Their own state is written below in plain values and rebuilt by RestoreIncidents when the game loads.
         public override void Serialize(WriteDictionary data, GameReader.LoadMode mode)
         {
             List<float> flat = new List<float>();
+            List<string> teams = new List<string>();
             for (int i = 0; i < _incidents.Count; i++)
             {
-                Incident incident = _incidents[i];
+                IncidentWork incident = _incidents[i];
                 flat.Add(incident.Threat);
                 flat.Add(incident.StartDay);
                 flat.Add(incident.DeadlineDay);
-                flat.Add(incident.Work);
-                flat.Add(incident.Progress);
+                flat.Add(ThreatWork(incident.Threat));                          // kept so the layout matches older saves
+                flat.Add(incident.Progress * ThreatWork(incident.Threat));      // in response points, as older saves had it
                 flat.Add(incident.Warned ? 1f : 0f);
+
+                string names = "";
+                foreach (Team team in incident.GetDevTeams())
+                {
+                    if (team != null) names += (names.Length > 0 ? "\n" : "") + team.Name;
+                }
+                teams.Add(names);
             }
             data["CyberIncidents"] = flat;
+            data["CyberIncidentTeams"] = teams;
             data["CyberDay"] = _dayCounter;
             data["CyberLastIncident"] = _lastIncidentDay;
+
+            DetachAll();
         }
 
         public override void Deserialize(WriteDictionary data, GameReader.LoadMode mode)
         {
             _loadedThisGame = true;
             _incidents.Clear();
+            _pending.Clear();
 
             List<float> flat = data.Get("CyberIncidents", new List<float>());
+            List<string> teams = data.Get("CyberIncidentTeams", new List<string>());
             for (int i = 0; i + 5 < flat.Count; i += 6)
             {
                 int threat = (int)flat[i];
                 if (threat < 0 || threat >= Threats.Length) continue;
 
-                Incident incident = new Incident();
-                incident.Threat = threat;
-                incident.StartDay = (int)flat[i + 1];
-                incident.DeadlineDay = (int)flat[i + 2];
-                incident.Work = flat[i + 3];
-                incident.Progress = flat[i + 4];
-                incident.Warned = flat[i + 5] > 0.5f;
-                _incidents.Add(incident);
+                IncidentRecord record = new IncidentRecord();
+                record.Threat = threat;
+                record.StartDay = (int)flat[i + 1];
+                record.DeadlineDay = (int)flat[i + 2];
+                float work = flat[i + 3] > 0f ? flat[i + 3] : ThreatWork(threat);
+                record.Progress = Mathf.Clamp01(flat[i + 4] / work);
+                record.Warned = flat[i + 5] > 0.5f;
+
+                int index = i / 6;
+                if (index < teams.Count && teams[index].Length > 0) record.Teams.AddRange(teams[index].Split('\n'));
+                _pending.Add(record);
             }
             _dayCounter = data.Get("CyberDay", 0);
             _lastIncidentDay = data.Get("CyberLastIncident", -1000);
+        }
+
+        // Turn the saved incidents back into work items once the game (company and teams) has finished loading.
+        private void RestoreIncidents(GameSettings gs)
+        {
+            if (gs == null || gs.MyCompany == null) return;
+
+            for (int i = 0; i < _pending.Count; i++)
+            {
+                IncidentRecord record = _pending[i];
+                IncidentWork incident = new IncidentWork(record.Threat, record.StartDay, record.DeadlineDay);
+                incident.Progress = record.Progress;
+                incident.Warned = record.Warned;
+                gs.MyCompany.AddWorkItem(incident);
+                if (record.Teams.Count > 0) incident.AddDevTeams(record.Teams);
+                else gs.ApplyDefaultTeams(incident, IncidentTeamKey);
+                _incidents.Add(incident);
+            }
+            _pending.Clear();
+            Log("restored " + _incidents.Count + " open cyber incident" + (_incidents.Count == 1 ? "" : "s") + " from the save");
+        }
+
+        private void DetachAll()
+        {
+            GameSettings gs = GameSettings.Instance;
+            if (gs == null || gs.MyCompany == null || _incidents.Count == 0) return;
+
+            lock (gs.MyCompany.WorkItems)
+            {
+                for (int i = 0; i < _incidents.Count; i++) gs.MyCompany.WorkItems.Remove(_incidents[i]);
+            }
+            _detachedForSave = true;
+        }
+
+        private void AttachAll()
+        {
+            _detachedForSave = false;
+            GameSettings gs = GameSettings.Instance;
+            if (gs == null || gs.MyCompany == null) return;
+
+            for (int i = 0; i < _incidents.Count; i++) gs.MyCompany.AddWorkItem(_incidents[i]);
         }
     }
 }

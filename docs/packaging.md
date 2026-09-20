@@ -5,7 +5,8 @@
 ```
 DLLMods\Cybersecurity\            <- the whole mod; linked into <game>\DLLMods\Cybersecurity
   CyberMeta.cs                    code: mod entry point and options screen
-  CyberBehaviour.cs               code: specialisation, incidents, registering the bundled data
+  CyberBehaviour.cs               code: specialisation, incident lifecycle, registering the bundled data
+  IncidentWork.cs                 code: the incident work item (progress bar, team work)
   meta.tyd                        name, author, description
   Data\                           the data mod
     SoftwareTypes\  CompanyTypes\  NameGenerators\  Localization\  meta.tyd
@@ -28,6 +29,11 @@ Facts found in the game's code that shape the design:
 - The game injects try/catch into mod methods. Errors inside mod code may show only in the in-game console, so the loader writes everything to both `output_log.txt` and the console, prefixed `[Cybersecurity]`.
 - Do not also link anything into `<game>\Mods`, or the data would load twice. `tools\link.ps1` only links `DLLMods\Cybersecurity`.
 - Mod code may not use `System.IO` or `System.Reflection`, which is why paths are built by string concatenation.
+- **The try/catch injector is a text scanner, not a parser** (`ModController.InjectTryBlocks`). Inside a class, at brace depth 0, every `(` makes it assume the next `{` is a method body and wrap it in `try { ... }`. Consequences for how the code has to be written:
+  - A field initializer with a call (`= new List<T>()`, `= Foo()`) must not be followed by a property or the end of the class; the next block after it has to be a method or constructor. Safest: create such objects in a constructor or `OnActivate`, and use methods instead of properties (a `get { }` block right after those fields produced `CS1519 Unexpected symbol 'try'`). Overriding a game property (`BackColor`) is fine when no such field comes before it.
+  - No `\"` inside strings and no `'{'`, `'}'`, `'('`, `')'` or `'"'` character literals (the scanner only understands `"` to end a string).
+  - The error line numbers refer to the injected source, not the file, so they do not match the editor.
+  - `tools\compile-check.ps1` repeats this scan (`INJECT` lines). `-DisableModErrors` turns the injection off in the game, but the check exists so Workshop builds are not affected.
 
 ## Workshop
 

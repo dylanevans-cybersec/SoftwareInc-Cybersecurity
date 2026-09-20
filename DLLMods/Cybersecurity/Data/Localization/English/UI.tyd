@@ -1,5 +1,6 @@
-#Service staff specialisation added by the code mod (DLLMods/Cybersecurity)
-Cybersecurity "Cybersecurity"
+#Cyber incident work item (DLLMods/Cybersecurity/IncidentWork.cs)
+IncidentWork "Cyber incident"
+CyberIncident "Cyber incidents"
 
 #Lawsuit subjects raised when a cyber incident is not contained in time (DLLMods/Cybersecurity)
 CyberBreach "Failing to protect customer data from a breach"

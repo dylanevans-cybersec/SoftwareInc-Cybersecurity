@@ -19,7 +19,7 @@ namespace CybersecurityMod
 
             Text text = WindowManager.SpawnLabel();
             text.text = "Cyber incidents (ransomware, phishing, data breaches, DDoS) target companies with many users and a strong reputation. "
-                + "Respond before the deadline or customers sue. Service staff trained in the Cybersecurity specialisation respond much faster.";
+                + "Each incident is a work item: assign a Service team to it and contain it before the deadline, or customers sue. Service staff trained in the Support specialisation work much faster.";
             WindowManager.AddElementToElement(text.gameObject, parent.gameObject, new Rect(0f, 0f, 460f, 84f), new Rect(0f, 0f, 0f, 0f));
 
             if (behaviour == null) return;
