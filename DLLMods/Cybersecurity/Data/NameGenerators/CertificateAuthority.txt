@@ -1,0 +1,35 @@
+-start(prefix)
+-prefix(core)
+Trust
+Cert
+Notary
+Seal
+Verity
+Credo
+Keystone
+Signet
+Assure
+Anchor
+Chain
+Root
+Fiducia
+Attest
+-core(suffix,end)
+Authority
+CA
+Sign
+Trust
+Secure
+Notary
+PKI
+Vault
+Works
+-suffix(end)
+ Global
+ Enterprise
+ Pro
+ Trust Network
+ Services
+ Root G2
+ Certified
+-end(stop)

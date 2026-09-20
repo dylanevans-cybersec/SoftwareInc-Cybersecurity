@@ -1,0 +1,253 @@
+SoftwareType
+{
+	Name	"Threat Intelligence Platform"
+	Description	"Collect, score and share indicators of compromise so everyone else's bad day becomes your early warning. Firewalls and EDR products build on one."
+	Unlock	2006
+	Random	0.15
+	Popularity	0.55
+	Retention	40
+	IdealPrice	2500
+	Iterative	0.72
+	OptimalDevTime	82
+	OneClient	False
+	InHouse	True
+	NameGenerator	ThreatIntel
+	SubmarketNames	[ Coverage; Accuracy; Integration ]
+	Features
+	[
+		{
+			Name	"Intel Pipeline & Analysis"
+			Spec	System
+			Description	"Ingest and clean indicators at scale, then turn a bare indicator into a story an analyst can act on"
+			DevTime	17
+			CodeArt	1
+			Submarkets	[ 2; 2; 2 ]
+			Features
+			[
+				{
+					Name	"Feed Ingestion"
+					Description	"Read every feed format anyone ever invented"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Deduplication Engine"
+					Description	"The same bad IP, reported four hundred times"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 3; 1 ]
+				}
+				{
+					Name	"Indicator Aging"
+					Description	"Yesterday's malicious address is today's innocent web host"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 0; 3; 0 ]
+				}
+				{
+					Name	"IOC Normalization (STIX)"
+					Description	"A shared language for describing threats"
+					Unlock	2011
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 1; 3; 2 ]
+				}
+				{
+					Name	"Confidence Scoring"
+					Description	"Rank sources by how often they turn out to be right"
+					Unlock	2012
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 0; 5; 0 ]
+				}
+				{
+					Name	"Retrospective Matching"
+					Description	"Search last year's logs for this week's indicators"
+					Unlock	2015
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 3; 2; 0 ]
+				}
+				{
+					Name	"WHOIS & Passive DNS"
+					Description	"Who owns this domain, and who else has ever pointed at it"
+					Unlock	2010
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0002
+					Submarkets	[ 1; 3; 1 ]
+				}
+				{
+					Name	"Malware Sandbox Detonation"
+					Description	"Run the suspicious file somewhere it can do no harm, and watch"
+					Unlock	2011
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 3; 3; 0 ]
+				}
+				{
+					Name	"Threat Actor Profiles"
+					Description	"Dossiers on the groups behind the attacks"
+					Unlock	2013
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 3; 2; 1 ]
+				}
+				{
+					Name	"Dark Web Crawling"
+					Description	"Read the forums where your stolen data is for sale"
+					Unlock	2014
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 5; 0; 0 ]
+				}
+				{
+					Name	"Attribution Engine"
+					Description	"Guess who did it, then hedge"
+					Unlock	2015
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 3; 0 ]
+				}
+				{
+					Name	"ATT&CK Mapping"
+					Description	"Label every behaviour with a technique number"
+					Unlock	2016
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 1; 2; 3 ]
+				}
+				{
+					Name	"Sample Resale"
+					Description	"Quietly resell the malware samples your customers submit to anyone who asks. <b><color=#FF0000>+{Currency:0.10} per user per day.</color></b>"
+					Unlock	2010
+					Level	3
+					DevTime	5
+					CodeArt	1
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"SampleResale\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.10, Deals, \"Sample Resale\"); if (Random() * Product.Userbase > 700000 * Product.Category.Popularity) { LaunchLawsuit(\"SampleResale\", Product.Sum * 0.4, 0.5); Product.DevCompany.AddFans(-Product.Userbase * 0.5, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.5); Product.KillAwareness(); Product.PutVar(\"SampleResale\", false); AddPopup(Localize(\"SampleResaleNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+			]
+		}
+		{
+			Name	"Collection & Sharing"
+			Spec	Network
+			Description	"Where the intelligence comes from, and where it goes"
+			DevTime	7
+			CodeArt	1
+			Submarkets	[ 3; 0; 3 ]
+			Features
+			[
+				{
+					Name	"Open-Source Feed Connectors"
+					Description	"Free blocklists, priced accordingly"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Commercial Feed Marketplace"
+					Description	"Buy indicators by the gigabyte"
+					Unlock	2009
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0002
+					Submarkets	[ 3; 1; 0 ]
+				}
+				{
+					Name	"Honeypot Network"
+					Description	"Sacrificial servers that attract and record attackers"
+					Unlock	2010
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 4; 1; 0 ]
+				}
+				{
+					Name	"Industry Sharing Groups"
+					Description	"Swap indicators with competitors who are also fighting the same criminals"
+					Unlock	2012
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 2; 1; 3 ]
+				}
+				{
+					Name	"Automated Takedown Requests"
+					Description	"Politely ask a hosting provider to stop hosting the malware"
+					Unlock	2016
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 1; 0; 3 ]
+				}
+			]
+		}
+		{
+			Name	Console
+			Spec	2D
+			Description	"Search, browse and share intelligence"
+			DevTime	5
+			CodeArt	0.3
+			Submarkets	[ 1; 1; 3 ]
+			Features
+			[
+				{
+					Name	"Indicator Search"
+					Description	"Type an address, learn its whole life story"
+					Level	1
+					DevTime	4
+					CodeArt	0.5
+					Submarkets	[ 1; 1; 2 ]
+				}
+				{
+					Name	"Alert Digest Emails"
+					Description	"Twelve emails a day nobody reads"
+					Level	1
+					DevTime	3
+					CodeArt	0.5
+					Submarkets	[ 0; 0; 3 ]
+				}
+				{
+					Name	"Threat Landscape Dashboard"
+					Description	"A world map with a lot of red on it"
+					Unlock	2011
+					Level	1
+					DevTime	5
+					CodeArt	0.2
+					Submarkets	[ 2; 0; 2 ]
+				}
+				{
+					Name	"Analyst Collaboration Boards"
+					Description	"Annotate, argue and agree on what an indicator means"
+					Unlock	2013
+					Level	2
+					DevTime	6
+					CodeArt	0.4
+					Submarkets	[ 0; 2; 3 ]
+				}
+			]
+		}
+	]
+}

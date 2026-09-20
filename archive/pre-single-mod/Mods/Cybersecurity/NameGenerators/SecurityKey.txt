@@ -1,0 +1,34 @@
+-start(prefix)
+-prefix(core)
+Aegis
+Guardian
+Bastion
+Sentry
+Vault
+Anchor
+Talisman
+Amulet
+Cipher
+Ward
+Sigil
+Warden
+Tether
+-core(suffix,end)
+Key
+Token
+Fob
+Dongle
+Stick
+Pass
+Lock
+Badge
+-suffix(end)
+ Pro
+ Nano
+ C
+ NFC
+ Bio
+ Plus
+ Series 5
+ Mini
+-end(stop)

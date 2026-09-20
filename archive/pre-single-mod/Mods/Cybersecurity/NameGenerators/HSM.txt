@@ -1,0 +1,32 @@
+-start(prefix)
+-prefix(core)
+Crypto
+Key
+Vault
+Cipher
+Enigma
+Citadel
+Bunker
+Tresor
+Strongbox
+Sentinel
+Ironbox
+Cerberus
+-core(suffix,end)
+Vault
+Box
+Safe
+Card
+HSM
+Module
+Guard
+Lock
+-suffix(end)
+ Pro
+ Enterprise
+ Series
+ Net
+ PCIe
+ XL
+ Mk II
+-end(stop)

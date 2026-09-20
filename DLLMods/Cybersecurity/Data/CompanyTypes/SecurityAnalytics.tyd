@@ -1,0 +1,14 @@
+CompanyType
+{
+	Specialization		"Security Analytics"
+	PerYear			0.2
+	Min			2
+	Max			2
+	Types
+	[
+		{
+		Software	"SIEM"
+		Chance		1
+		}
+	]
+}

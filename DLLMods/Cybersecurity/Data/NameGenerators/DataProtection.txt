@@ -1,0 +1,36 @@
+-start(prefix)
+-prefix(core)
+Data
+Safe
+Secure
+Second
+Ark
+Vault
+Cryo
+Lockdown
+Restore
+Redundant
+Bitlock
+Shred
+Backstop
+Everkeep
+-core(suffix,end)
+Guard
+Backup
+Vault
+Lock
+Save
+Shield
+Keeper
+Protect
+Recover
+Crypt
+-suffix(end)
+ Pro
+ Enterprise
+ Cloud
+ Business
+ Plus
+ Ultimate
+ Total
+-end(stop)

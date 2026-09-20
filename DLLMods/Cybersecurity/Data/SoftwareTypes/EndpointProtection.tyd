@@ -1,0 +1,522 @@
+SoftwareType
+{
+	Name	"Endpoint Protection"
+	Description	"Protect every computer and phone from malware and intruders. From simple antivirus, through endpoint detection and response, to extended detection across the whole company."
+	Unlock	1988
+	Random	0.15
+	OptimalDevTime	135
+	OneClient	False
+	InHouse	True
+	OSSupport	[ Computer; Phone ]
+	NameGenerator	EDR
+	SubmarketNames	[ Prevention; Detection; Response ]
+	Categories
+	[
+		{
+			Name	Antivirus
+			Description	"Signature and behaviour based protection for everyday computers and phones"
+			Unlock	1988
+			Popularity	0.9
+			Submarkets	[ 4; 2; 0 ]
+			TimeScale	0.9
+			Retention	24
+			IdealPrice	50
+			Iterative	0.85
+			NameGenerator	AntivirusTEST
+		}
+		{
+			Name	"EDR / XDR"
+			Description	"Continuous endpoint recording with hunting and remote response, growing into extended detection across the whole company"
+			Unlock	2012
+			Popularity	0.7
+			Submarkets	[ 2; 4; 4 ]
+			TimeScale	1
+			Retention	36
+			IdealPrice	180
+			Iterative	0.78
+			NameGenerator	EDR
+		}
+	]
+	Features
+	[
+		{
+			Name	"Endpoint Agent"
+			Spec	System
+			Description	"The sensor and scanning engine that lives on every machine"
+			DevTime	22
+			CodeArt	1
+			Submarkets	[ 2; 2; 1 ]
+			Features
+			[
+				{
+					Name	"Process Behavior Blocking"
+					Description	"Stop programs that act like malware, whatever they are called"
+					Unlock	2005
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 1; 0 ]
+				}
+				{
+					Name	"Application Allowlisting"
+					Description	"If it is not on the list, it does not run"
+					Unlock	2007
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+				}
+				{
+					Name	"Exploit Prevention"
+					Description	"Break the techniques attackers use, not just the samples they use them with"
+					Unlock	2008
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 1; 0 ]
+				}
+				{
+					Name	"Kernel Sensor"
+					Description	"See system calls from the one place attackers cannot hide"
+					Unlock	2012
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 4; 0 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Memory Scanning"
+					Description	"Find the malware that never touches the disk"
+					Unlock	2012
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 4; 0 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Tamper Protection"
+					Description	"Attackers try to switch you off first. Do not let them"
+					Unlock	2012
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Ransomware Rollback"
+					Description	"Quietly undo what the ransomware just encrypted"
+					Unlock	2016
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 3; 0; 4 ]
+				}
+				{
+					Name	"Skip Staged Rollouts"
+					Description	"Push every content update to every customer at once and save all that QA time. <b><color=#FF0000>Fixes bugs faster, until it doesn't.</color></b>"
+					Unlock	2012
+					Level	3
+					DevTime	4
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ "EDR / XDR" ]
+					Script_EndOfDay	"Product.FixBugs(Product.Userbase * 0.004); if (Random() < 0.0008) { Product.AddBugs(Product.Userbase * 0.02); LaunchLawsuit(\"BadUpdate\", Product.Sum * 0.3, 0.5); Product.DevCompany.AddFans(-Product.Userbase * 0.2, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.8); AddPopup(Localize(\"BadUpdateNotification\", Product.Name), 1, \"Exclamation\", Issue); }"
+				}
+				{
+					Name	"DNS Sinkholing"
+					Description	"Send malware phoning home to a dead end"
+					Unlock	2010
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 0 ]
+				}
+				{
+					Name	"Quick Scan Mode"
+					Description	"Fast scanning with minimal system impact"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 3; 1 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Game Mode"
+					Description	"Suppress notifications during fullscreen applications"
+					Unlock	2010
+					Level	1
+					DevTime	4
+					CodeArt	0.8
+					Submarkets	[ 0; 2; 2 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Cloud Scanning"
+					Description	"Offload heavy scanning to cloud servers"
+					Unlock	2012
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0005
+					Submarkets	[ 1; 4; 0 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Signature Scanning"
+					Description	"Detect known viruses using signature database"
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 0; 0 ]
+				}
+				{
+					Name	"Heuristic Analysis"
+					Description	"Identify unknown threats through behavior patterns"
+					Unlock	1995
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 1; 0 ]
+				}
+				{
+					Name	"Real-time Protection"
+					Description	"Monitor system activity continuously for threats"
+					Unlock	1998
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 3; 2; 1 ]
+				}
+				{
+					Name	"Ransomware Protection"
+					Description	"Specialized detection and prevention of ransomware attacks"
+					Unlock	2015
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Submarkets	[ 5; 0; 0 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Machine Learning Detection"
+					Description	"AI-powered threat identification and classification"
+					Unlock	2018
+					Level	2
+					DevTime	12
+					CodeArt	1
+					Submarkets	[ 4; 2; 0 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Bloatware Bundler"
+					Description	"Include 'helpful' browser toolbars, search engine changes, and system optimizers with every install. <b><color=#FF0000>+$5 per installation.</color></b>"
+					Unlock	2005
+					Level	3
+					DevTime	4
+					CodeArt	0.8
+					Submarkets	0
+					SoftwareCategories	[ Antivirus ]
+					Script_EndOfDay	"if (Product.GetVar(\"BloatwareExposed\", true)) { if (Random() * Product.Userbase > 500000 * Product.Category.Popularity) { Product.DevCompany.AddFans(-Product.Userbase * 0.15, Product.Category); Product.KillAwareness(); Product.PutVar(\"BloatwareExposed\", false); } }"
+					Script_AfterSales	"Product.DevCompany.MakeTransaction((PhysicalSales + DigitalSales) * 5, Deals, \"Bundleware Revenue\");"
+				}
+				{
+					Name	"False Positive Generator"
+					Description	"Occasionally flag legitimate software as threats to encourage users to buy the premium version for whitelisting. <b><color=#FF0000>Increases premium upgrade rate by 15%.</color></b>"
+					Unlock	2008
+					Level	3
+					DevTime	5
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ Antivirus ]
+					Script_EndOfDay	"Product.DevCompany.MakeTransaction(Product.Userbase * 0.08, Sales, \"Premium Upgrades\"); if (Product.GetVar(\"FalsePositiveScandal\", true)) { if (Random() * Product.Userbase > 3000000 * Product.Category.Popularity) { LaunchLawsuit(\"MaliciousBusiness\", Product.Sum * 0.1, 0.5); Product.DevCompany.AddFans(-Product.Userbase * 0.25, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.5); Product.PutVar(\"FalsePositiveScandal\", false); } }"
+				}
+				{
+					Name	"Firewall Integration"
+					Description	"Basic firewall to block unauthorized network access"
+					Unlock	2000
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 2; 0; 1 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Web Protection"
+					Description	"Block malicious websites and phishing attempts"
+					Unlock	2005
+					Level	1
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 3; 0; 2 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Email Scanning"
+					Description	"Scan incoming and outgoing emails for threats"
+					Unlock	1998
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 2; 0; 1 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"VPN Service"
+					Description	"Built-in VPN for secure browsing"
+					Unlock	2015
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0005
+					Submarkets	[ 2; 1; 3 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Browser Hijacker"
+					Description	"Redirect users' searches through your affiliate links and inject sponsored results. No one reads the EULA anyway. <b><color=#FF0000>+$0.15 per user per day.</color></b>"
+					Unlock	2010
+					Level	3
+					DevTime	6
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ Antivirus ]
+					Script_EndOfDay	"Product.DevCompany.MakeTransaction(Product.Userbase * 0.15, Deals, \"Affiliate Revenue\"); if (Product.GetVar(\"HijackingDiscovered\", true)) { if (Random() * Product.Userbase > 800000 * Product.Category.Popularity) { LaunchLawsuit(\"UnauthorizedModification\", Product.Sum * 0.75, 0.6); Product.DevCompany.AddFans(-Product.Userbase * 0.75, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.25); Product.KillAwareness(); Product.PutVar(\"HijackingDiscovered\", false); } }"
+				}
+				{
+					Name	"Comprehensive Profiling"
+					Description	"Collect detailed browsing habits, app usage, and file access patterns to build user profiles for data brokers. <b><color=#FF0000>+$0.20 per user per day.</color></b>"
+					Unlock	2015
+					Level	3
+					DevTime	8
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ Antivirus ]
+					Script_EndOfDay	"Product.DevCompany.MakeTransaction(Product.Userbase * 0.20, Deals, \"User Data Sales\"); if (Product.GetVar(\"ProfilingExposed\", true)) { if (Random() * Product.Userbase > 1500000 * Product.Category.Popularity) { LaunchLawsuit(\"PrivacyViolation\", Product.Sum * 0.6, 0.65); Product.DevCompany.AddFans(-Product.Userbase * 0.8, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.45); Product.KillAwareness(); Product.PutVar(\"ProfilingExposed\", false); } }"
+				}
+			]
+		}
+		{
+			Name	"Detection & Response"
+			Spec	Network
+			Description	"Turn raw endpoint and network events into findings and actions. Needs a Threat Intelligence Platform to enrich detections."
+			Dependencies	"Threat Intelligence Platform"
+			Unlock	2012
+			DevTime	14
+			CodeArt	1
+			Submarkets	[ 1; 4; 4 ]
+			SoftwareCategories	[ "EDR / XDR" ]
+			Features
+			[
+				{
+					Name	"Event Timeline"
+					Description	"Every process, file and connection, in order"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 0; 3; 2 ]
+				}
+				{
+					Name	"Threat Hunting Queries"
+					Description	"Ask the fleet a question and get an answer in seconds"
+					Unlock	2014
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 0; 4; 1 ]
+				}
+				{
+					Name	"Behavioral Analytics"
+					Description	"Baseline normal, flag the weird"
+					Unlock	2015
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 1; 5; 0 ]
+				}
+				{
+					Name	"Automated Containment"
+					Description	"Isolate the infected laptop before its owner finishes their coffee"
+					Unlock	2016
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 0; 1; 5 ]
+				}
+				{
+					Name	"Machine Learning Models"
+					Description	"Statistics with a marketing budget"
+					Unlock	2018
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 3; 4; 0 ]
+				}
+				{
+					Name	"Telemetry Resale"
+					Description	"Sell 'anonymized' endpoint telemetry to anyone who asks nicely. <b><color=#FF0000>+{Currency:0.12} per user per day.</color></b>"
+					Unlock	2013
+					Level	3
+					DevTime	5
+					CodeArt	1
+					Server	0.0003
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"TelemetryResale\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.12, Deals, \"Telemetry Sales\"); if (Random() * Product.Userbase > 1000000 * Product.Category.Popularity) { LaunchLawsuit(\"TelemetryResale\", Product.Sum * 0.4, 0.5); Product.DevCompany.AddFans(-Product.Userbase * 0.5, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.5); Product.KillAwareness(); Product.PutVar(\"TelemetryResale\", false); AddPopup(Localize(\"TelemetryResaleNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+				{
+					Name	"Host Isolation"
+					Description	"Cut a machine off from everything except the console"
+					Unlock	2012
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 0; 1; 4 ]
+				}
+				{
+					Name	"Network Traffic Analysis"
+					Description	"Correlate what the endpoint did with what the wire saw"
+					Unlock	2013
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 2; 3; 0 ]
+				}
+				{
+					Name	"Lateral Movement Detection"
+					Description	"Catch the attacker hopping from box to box"
+					Unlock	2016
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 4; 1 ]
+				}
+			]
+		}
+		{
+			Name	"Console & Orchestration"
+			Spec	2D
+			Description	"Control panels for users, dashboards and triage queues for analysts, and playbooks for the biggest deployments"
+			DevTime	14
+			CodeArt	0.3
+			Submarkets	[ 0; 1; 4 ]
+			Features
+			[
+				{
+					Name	"Endpoint Dashboard"
+					Description	"One screen for the whole fleet"
+					Unlock	2012
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 1; 3 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Alert Triage Queue"
+					Description	"Sort the thousand alerts by which ones matter"
+					Unlock	2012
+					Level	1
+					DevTime	5
+					CodeArt	0.4
+					Submarkets	[ 0; 1; 4 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Mobile Responder App"
+					Description	"Contain a breach from the pub"
+					Unlock	2013
+					Level	1
+					DevTime	5
+					CodeArt	0.5
+					Submarkets	[ 0; 0; 3 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Attack Storyline Graph"
+					Description	"Draw the intrusion as a picture your CEO can follow"
+					Unlock	2016
+					Level	2
+					DevTime	7
+					CodeArt	0.2
+					Submarkets	[ 0; 3; 2 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Control Panel"
+					Description	"Central interface for managing security settings"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 0; 3 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Scan Scheduler"
+					Description	"Configure automated scanning times and frequency"
+					Unlock	1998
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 0; 1; 2 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Threat Notifications"
+					Description	"Alert users when threats are detected"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 1; 0; 2 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Performance Dashboard"
+					Description	"Display system health and security status"
+					Unlock	2008
+					Level	2
+					DevTime	6
+					CodeArt	0.2
+					Submarkets	[ 0; 1; 3 ]
+					SoftwareCategories	[ Antivirus ]
+				}
+				{
+					Name	"Scare Tactics"
+					Description	"Show alarming pop-ups about 'critical threats' and 'system vulnerabilities' to pressure users into premium subscriptions. <b><color=#FF0000>+$0.02 per user per day.</color></b>"
+					Unlock	2006
+					Level	3
+					DevTime	3
+					CodeArt	0.2
+					Submarkets	0
+					SoftwareCategories	[ Antivirus ]
+					Script_EndOfDay	"Product.DevCompany.MakeTransaction(Product.Userbase * 0.02, Sales, \"Fear-Based Upgrades\"); if (Product.GetVar(\"ScareTacticsExposed\", true)) { if (Random() * Product.Userbase > 1500000 * Product.Category.Popularity) { Product.DevCompany.AddFans(-Product.Userbase * 0.55, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.75); Product.PutVar(\"ScareTacticsExposed\", false); } }"
+				}
+				{
+					Name	"Playbook Automation"
+					Description	"Codify what your best responder does at 3am"
+					Unlock	2019
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 0; 0; 5 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+				{
+					Name	"Managed Analyst Desk"
+					Description	"Humans read the alerts so customers do not have to"
+					Unlock	2020
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 0; 2; 5 ]
+					SoftwareCategories	[ "EDR / XDR" ]
+				}
+			]
+		}
+	]
+}

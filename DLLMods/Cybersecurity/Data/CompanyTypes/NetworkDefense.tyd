@@ -1,0 +1,14 @@
+CompanyType
+{
+	Specialization		"Network Defense"
+	PerYear			0.2
+	Min			2
+	Max			3
+	Types
+	[
+		{
+		Software	"Network Security Suite"
+		Chance		1
+		}
+	]
+}

@@ -1,0 +1,37 @@
+-start(prefix)
+-prefix(core)
+Log
+Event
+Insight
+Sentry
+Trace
+Beacon
+Argus
+Panopticon
+Overwatch
+Lumen
+Archive
+Vantage
+Watchdog
+Scribe
+-core(suffix,end)
+SIEM
+Sight
+Stream
+Vault
+Hub
+Analytics
+Correlate
+Sentinel
+Central
+Lens
+-suffix(end)
+ Enterprise
+ Cloud
+ Pro
+ SOAR
+ Platform
+ Ultimate
+ Next
+ One
+-end(stop)

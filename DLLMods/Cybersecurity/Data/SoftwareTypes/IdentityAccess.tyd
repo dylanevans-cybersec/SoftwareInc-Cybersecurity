@@ -1,0 +1,345 @@
+SoftwareType
+{
+	Name	"Identity & Access"
+	Description	"Decide who gets in, prove they are who they say, and make sure nobody keeps the keys to everything."
+	Unlock	1998
+	Random	0.1
+	OptimalDevTime	42
+	OneClient	False
+	InHouse	True
+	OSSupport	[ Computer; Phone ]
+	NameGenerator	IdentityAccess
+	SubmarketNames	[ Security; Convenience; Administration ]
+	Categories
+	[
+		{
+			Name	"Password Manager"
+			Description	"Remember every password so people do not have to, or reuse the same one everywhere"
+			Unlock	2000
+			Popularity	0.85
+			Submarkets	[ 3; 5; 1 ]
+			TimeScale	0.5
+			Retention	30
+			IdealPrice	30
+			Iterative	0.8
+		}
+		{
+			Name	"Access Management"
+			Description	"Decide who may log in to what, prove they are who they say, and control the accounts that can break everything"
+			Unlock	1998
+			Popularity	0.65
+			Submarkets	[ 5; 2; 4 ]
+			TimeScale	1
+			Retention	45
+			IdealPrice	1500
+			Iterative	0.72
+		}
+	]
+	Features
+	[
+		{
+			Name	"Identity Core"
+			Spec	System
+			Description	"Store credentials, verify identities and decide what they may do"
+			DevTime	10
+			CodeArt	1
+			Submarkets	[ 3; 2; 2 ]
+			Features
+			[
+				{
+					Name	"Credential Encryption"
+					Description	"Never store a secret in a form a thief can read"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 4; 0; 0 ]
+				}
+				{
+					Name	"Password Vault"
+					Description	"A single encrypted place for every login"
+					Unlock	2000
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 2; 3; 0 ]
+					SoftwareCategories	[ "Password Manager" ]
+				}
+				{
+					Name	"Password Generator"
+					Description	"Long, random and impossible to remember"
+					Unlock	2000
+					Level	1
+					DevTime	3
+					CodeArt	1
+					Submarkets	[ 2; 3; 0 ]
+					SoftwareCategories	[ "Password Manager" ]
+				}
+				{
+					Name	"Autofill Engine"
+					Description	"Type the password so the human does not have to"
+					Unlock	2008
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 0; 5; 0 ]
+					SoftwareCategories	[ "Password Manager" ]
+				}
+				{
+					Name	"Directory Integration"
+					Description	"Read users and groups straight from the company directory"
+					Unlock	1998
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 1; 1; 4 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"SAML & OIDC Federation"
+					Description	"Let one login work across every vendor"
+					Unlock	2006
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 3; 3 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Adaptive Risk Engine"
+					Description	"Ask for more proof when a login looks strange"
+					Unlock	2014
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 4; 2; 1 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Credential Rotation"
+					Description	"Change every privileged password before anyone can use it twice"
+					Unlock	2010
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 4; 0; 3 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Machine Secrets Vault"
+					Description	"API keys and certificates deserve a safe too"
+					Unlock	2015
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 0; 3 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Just-in-Time Access"
+					Description	"Admin rights that expire on their own"
+					Unlock	2016
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 5; 0; 2 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Session Recording"
+					Description	"Video evidence of everything an administrator did"
+					Unlock	2009
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 4; 0; 4 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Master Key Escrow"
+					Description	"Keep a copy of every vault master key 'for account recovery' and monetize the recovery service. <b><color=#FF0000>+{Currency:0.06} per user per day.</color></b>"
+					Unlock	2004
+					Level	3
+					DevTime	4
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ "Password Manager" ]
+					Script_EndOfDay	"if (Product.GetVar(\"KeyEscrow\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.06, Deals, \"Recovery Service Fees\"); if (Random() * Product.Userbase > 700000 * Product.Category.Popularity) { LaunchLawsuit(\"EscrowedVaultKeys\", Product.Sum * 0.6, 0.6); Product.DevCompany.AddFans(-Product.Userbase * 0.6, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.3); Product.KillAwareness(); Product.PutVar(\"KeyEscrow\", false); AddPopup(Localize(\"EscrowedVaultKeysNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+			]
+		}
+		{
+			Name	"Authentication Services"
+			Spec	Network
+			Description	"Everything that talks to the user to check who they are"
+			DevTime	7
+			CodeArt	1
+			Submarkets	[ 4; 2; 1 ]
+			Features
+			[
+				{
+					Name	"One-Time Passcodes"
+					Description	"Six digits that change every thirty seconds"
+					Unlock	1998
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 4; 1; 0 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Push Notification Approval"
+					Description	"Tap yes on the phone to log in"
+					Unlock	2012
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0002
+					Submarkets	[ 3; 4; 0 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Hardware Key Support"
+					Description	"Log in with a physical security key"
+					Unlock	2014
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 5; 1; 1 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Passwordless Sign-In"
+					Description	"The best password is no password"
+					Unlock	2018
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 3; 5; 1 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Legacy App Proxy"
+					Description	"Put single sign-on in front of software from 1998"
+					Unlock	2008
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 1; 0; 5 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Secure Password Sharing"
+					Description	"Share a login without sharing the password"
+					Unlock	2010
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 1; 2; 3 ]
+					SoftwareCategories	[ "Password Manager" ]
+				}
+				{
+					Name	"Breach Monitoring"
+					Description	"Tell people when their password shows up in a leak"
+					Unlock	2013
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 3; 1; 1 ]
+					SoftwareCategories	[ "Password Manager" ]
+				}
+				{
+					Name	"Remote Session Proxy"
+					Description	"Administrators never touch the target directly"
+					Unlock	2007
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 1; 2 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+			]
+		}
+		{
+			Name	Console
+			Spec	2D
+			Description	"Where users manage themselves and administrators manage everyone else"
+			DevTime	6
+			CodeArt	0.3
+			Submarkets	[ 1; 3; 3 ]
+			Features
+			[
+				{
+					Name	"Admin Dashboard"
+					Description	"Who has access to what, in one picture"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 1; 4 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Audit Reports"
+					Description	"Every access decision, in a format an auditor accepts"
+					Unlock	2003
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 1; 0; 4 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Browser Extension"
+					Description	"Live inside the browser where the passwords are needed"
+					Unlock	2005
+					Level	1
+					DevTime	4
+					CodeArt	0.7
+					Submarkets	[ 0; 4; 0 ]
+					SoftwareCategories	[ "Password Manager" ]
+				}
+				{
+					Name	"Mobile App"
+					Description	"Log in and approve from the phone"
+					Unlock	2009
+					Level	1
+					DevTime	5
+					CodeArt	0.5
+					Submarkets	[ 0; 4; 1 ]
+				}
+				{
+					Name	"Self-Service Password Reset"
+					Description	"Fewer helpdesk tickets, more grateful staff"
+					Unlock	2006
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 0; 3; 3 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Access Request Workflows"
+					Description	"Ask for access, get approval, get it revoked"
+					Unlock	2011
+					Level	2
+					DevTime	6
+					CodeArt	0.4
+					Submarkets	[ 1; 1; 5 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+				{
+					Name	"Break-Glass Emergency Access"
+					Description	"A sealed envelope for when everything else is down"
+					Unlock	2012
+					Level	2
+					DevTime	5
+					CodeArt	0.5
+					Submarkets	[ 2; 0; 3 ]
+					SoftwareCategories	[ "Access Management" ]
+				}
+			]
+		}
+	]
+}

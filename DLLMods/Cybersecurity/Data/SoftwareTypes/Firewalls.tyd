@@ -1,0 +1,403 @@
+SoftwareType
+{
+	Name	Firewall
+	Description	"A network security appliance that protects from unauthorized access and cyber threats. Needs a Firewall OS to run on."
+	Unlock	1995
+	Random	0.2
+	OptimalDevTime	78
+	OneClient	False
+	InHouse	False
+	Hardware	True
+	SubmarketNames	[ Security; Performance; Management ]
+	Categories
+	[
+		{
+			Name	"SMB Firewall"
+			Description	"An affordable firewall solution for small and medium businesses"
+			Unlock	1998
+			Popularity	0.85
+			Submarkets	[ 2; 1; 2 ]
+			TimeScale	0.54
+			Retention	36
+			IdealPrice	1500
+			Iterative	0.7
+			NameGenerator	Firewall
+		}
+		{
+			Name	"Enterprise Firewall"
+			Description	"A high-performance firewall for large corporate networks, growing into deep packet inspection and application awareness"
+			Unlock	1995
+			Popularity	0.75
+			Submarkets	[ 3; 2; 2 ]
+			TimeScale	1
+			Retention	45
+			IdealPrice	6500
+			Iterative	0.65
+			NameGenerator	Firewall
+		}
+	]
+	Manufacturing
+	{
+		Components
+		[
+			{
+				Name	"Network Processor"
+				BuiltInThumbnail	Microchip
+				Price	200
+				Time	8
+			}
+			{
+				Name	"RAM Module"
+				BuiltInThumbnail	Microchip
+				Price	50
+				Time	4
+			}
+			{
+				Name	"Storage Drive"
+				BuiltInThumbnail	Harddrive
+				Price	75
+				Time	4
+			}
+			{
+				Name	"Network Interface"
+				BuiltInThumbnail	PCB
+				Price	100
+				Time	6
+				DependsOn	"Multi-Port Support"
+			}
+			{
+				Name	"Security Chip"
+				BuiltInThumbnail	Fingerprint
+				Price	150
+				Time	6
+				DependsOn	"Hardware Encryption"
+			}
+			{
+				Name	"Cooling System"
+				BuiltInThumbnail	Thermostat
+				Price	30
+				Time	2
+			}
+			{
+				Name	"Power Supply"
+				BuiltInThumbnail	Battery
+				Price	40
+				Time	2
+			}
+			{
+				Name	"Metal Chassis"
+				BuiltInThumbnail	PlasticCase
+				Price	60
+				Time	4
+			}
+			{
+				Name	"Compute Module"
+				BuiltInThumbnail	Microchip
+				Price	10
+				Time	8
+			}
+			{
+				Name	"Chassis Assembly"
+				BuiltInThumbnail	PlasticCase
+				Price	10
+				Time	6
+			}
+			{
+				Name	"Main Board"
+				BuiltInThumbnail	PCB
+				Price	20
+				Time	8
+			}
+		]
+		Processes
+		[
+			{
+				Inputs	[ "Network Processor"; "RAM Module"; "Storage Drive" ]
+				Output	"Compute Module"
+			}
+			{
+				Inputs	[ "Metal Chassis"; "Power Supply"; "Cooling System" ]
+				Output	"Chassis Assembly"
+			}
+			{
+				Inputs	[ "Compute Module"; "Network Interface"; "Security Chip" ]
+				Output	"Main Board"
+			}
+			{
+				Inputs	[ "Main Board"; "Chassis Assembly" ]
+				Output	Final
+			}
+		]
+		FinalTime	4
+	}
+	Features
+	[
+		{
+			Name	"Network Protection"
+			Spec	Network
+			Description	"Core firewall functionality with packet filtering and access control"
+			Dependencies	"Firewall OS"
+			DevTime	21
+			CodeArt	1
+			Submarkets	[ 3; 1; 1 ]
+			Features
+			[
+				{
+					Name	"Stateful Inspection"
+					Description	"Track connection states for enhanced security"
+					Level	1
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Deep Packet Inspection"
+					Description	"Analyze packet contents for threats"
+					Unlock	2005
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Submarkets	[ 4; 1; 0 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Intrusion Prevention"
+					Description	"Actively block detected threats in real-time"
+					Unlock	2006
+					Level	2
+					DevTime	12
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Application Control"
+					Description	"Identify and control applications traversing the network"
+					Unlock	2008
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Submarkets	[ 3; 1; 1 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"URL Filtering"
+					Description	"Block access to malicious or unwanted websites"
+					Unlock	2002
+					Level	1
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 3; 0; 0 ]
+				}
+				{
+					Name	"Multi-Port Support"
+					Description	"Additional network interfaces for complex topologies"
+					Level	1
+					DevTime	6
+					CodeArt	0.8
+					Submarkets	[ 0; 2; 1 ]
+				}
+				{
+					Name	"Data Collection"
+					Description	"Collect and monetize network traffic patterns and usage data. Purely for 'product improvement' purposes, of course. <b><color=#FF0000>+{Currency:0.15} per user per day.</color></b>"
+					Unlock	2005
+					Level	3
+					DevTime	6
+					CodeArt	1
+					Server	0.0003
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"DataCollectionExposed\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.15, Deals, \"Data Broker Revenue\"); if (Random() * Product.Userbase > 2000000 * Product.Category.Popularity) { LaunchLawsuit(\"PrivacyViolation\", Product.Sum * 0.3, 0.4); Product.DevCompany.AddFans(-Product.Userbase * 0.6, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.85); Product.KillAwareness(); Product.PutVar(\"DataCollectionExposed\", false); AddPopup(Localize(\"DataCollectionNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+				{
+					Name	"Threat Feed Ingestion"
+					Description	"Ingests curated threat feeds containing IOCs to block known-bad activity"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 3; 0; 0 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Reputation Scoring"
+					Description	"Score every address and domain, then block the worst"
+					Unlock	2013
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Server	0.0002
+					Submarkets	[ 4; 0; 1 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+			]
+		}
+		{
+			Name	"System Management"
+			Spec	System
+			Description	"Administration, monitoring, and configuration capabilities"
+			DevTime	12
+			CodeArt	0.7
+			Submarkets	[ 1; 1; 3 ]
+			Features
+			[
+				{
+					Name	"Real-time Monitoring"
+					Description	"Live traffic and threat visualization"
+					Level	1
+					DevTime	7
+					CodeArt	0.6
+					Server	0.0002
+					Submarkets	[ 1; 1; 2 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Alert System"
+					Description	"Automated notifications for security events"
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 2; 0; 2 ]
+				}
+				{
+					Name	"Reporting Tools"
+					Description	"Generate compliance and activity reports"
+					Unlock	2002
+					Level	2
+					DevTime	8
+					CodeArt	0.7
+					Submarkets	[ 1; 0; 3 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Configuration Backup"
+					Description	"Automated backup and restore of firewall settings"
+					Unlock	2000
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0002
+					Submarkets	[ 1; 1; 1 ]
+				}
+				{
+					Name	"High Availability"
+					Description	"Redundancy and failover capabilities"
+					Unlock	2003
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Submarkets	[ 2; 2; 1 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Government Backdoor"
+					Description	"A 'security feature' that certain three-letter agencies find very reassuring. What could go wrong? <b><color=#FF0000>+25% revenue per unit sold.</color></b>"
+					Unlock	2001
+					Level	3
+					DevTime	8
+					CodeArt	1
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"BackdoorDiscovered\", true)) { if (Random() * Product.Userbase > 500000 * Product.Category.Popularity) { LaunchLawsuit(\"UnauthorizedSurveillance\", Product.Sum * 2, 0.7); Product.DevCompany.AddFans(-Product.Userbase * 0.3, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.4); Product.KillAwareness(); Product.PutVar(\"BackdoorDiscovered\", false); AddPopup(Localize(\"BackdoorNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+					Script_AfterSales	"if (Product.GetVar(\"BackdoorDiscovered\", true)) { Product.DevCompany.MakeTransaction(PhysicalSales * Product.Price * 0.25, Deals, \"Government Incentives\"); }"
+				}
+			]
+		}
+		{
+			Name	"User Interface"
+			Spec	2D
+			Description	"Graphical management interface and visualization"
+			DevTime	10
+			CodeArt	0.3
+			Submarkets	[ 0; 1; 4 ]
+			Features
+			[
+				{
+					Name	"Command Line Interface"
+					Description	"Text-based configuration and management"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 0; 0; 2 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Web GUI"
+					Description	"Browser-based configuration interface"
+					Level	1
+					DevTime	6
+					CodeArt	0.3
+					Submarkets	[ 0; 0; 3 ]
+				}
+				{
+					Name	Dashboard
+					Description	"Visual overview of firewall status and activity"
+					Unlock	2004
+					Level	1
+					DevTime	7
+					CodeArt	0.2
+					Submarkets	[ 0; 1; 3 ]
+				}
+				{
+					Name	"Traffic Graphs"
+					Description	"Visual representation of network traffic patterns"
+					Unlock	2001
+					Level	1
+					DevTime	6
+					CodeArt	0.2
+					Submarkets	[ 1; 2; 2 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Threat Map"
+					Description	"Geographic visualization of detected threats"
+					Unlock	2010
+					Level	2
+					DevTime	8
+					CodeArt	0.3
+					Submarkets	[ 2; 1; 2 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+			]
+		}
+		{
+			Name	"Hardware Acceleration"
+			Spec	Hardware
+			Optional	True
+			Description	"Dedicated hardware components for enhanced performance"
+			Unlock	2003
+			DevTime	10
+			CodeArt	0.9
+			Submarkets	[ 1; 3; 0 ]
+			Features
+			[
+				{
+					Name	"Hardware Encryption"
+					Description	"Dedicated encryption processor for VPN and secure traffic"
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 3; 0 ]
+				}
+				{
+					Name	"Packet Processing ASIC"
+					Description	"Custom chip for ultra-fast packet inspection"
+					Unlock	2007
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Submarkets	[ 0; 4; 0 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+				{
+					Name	"Memory Cache"
+					Description	"Hardware-based caching for improved performance"
+					Unlock	2005
+					Level	1
+					DevTime	6
+					CodeArt	0.9
+					Submarkets	[ 0; 3; 1 ]
+					SoftwareCategories	[ "Enterprise Firewall" ]
+				}
+			]
+		}
+	]
+}

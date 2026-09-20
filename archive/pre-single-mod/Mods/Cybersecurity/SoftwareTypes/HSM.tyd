@@ -1,0 +1,347 @@
+SoftwareType
+{
+	Name	HSM
+	Description	"A Hardware Security Module: a tamper-proof box that keeps cryptographic keys where nothing else can reach them."
+	Unlock	1998
+	Random	0.15
+	Popularity	0.55
+	Retention	66
+	IdealPrice	8000
+	Iterative	0.65
+	OptimalDevTime	78
+	OneClient	False
+	InHouse	False
+	Hardware	True
+	NameGenerator	HSM
+	SubmarketNames	[ Security; Performance; Manageability ]
+	Manufacturing
+	{
+		Components
+		[
+			{
+				Name	"Crypto Processor"
+				BuiltInThumbnail	Microchip
+				Price	300
+				Time	12
+			}
+			{
+				Name	"Secure Memory"
+				BuiltInThumbnail	Microchip
+				Price	100
+				Time	6
+			}
+			{
+				Name	"Host Connector"
+				BuiltInThumbnail	USB
+				Price	15
+				Time	4
+			}
+			{
+				Name	"Network Interface"
+				BuiltInThumbnail	PCB
+				Price	80
+				Time	6
+				DependsOn	"Remote Management"
+			}
+			{
+				Name	"Tamper Mesh"
+				BuiltInThumbnail	Fingerprint
+				Price	60
+				Time	8
+				DependsOn	"Tamper Detection"
+			}
+			{
+				Name	Enclosure
+				BuiltInThumbnail	PlasticCase
+				Price	60
+				Time	6
+			}
+			{
+				Name	"Redundant Power Supply"
+				BuiltInThumbnail	Battery
+				Price	40
+				Time	2
+				DependsOn	"Hot-Swap Power"
+			}
+			{
+				Name	"Secure Board"
+				BuiltInThumbnail	PCB
+				Price	30
+				Time	8
+			}
+			{
+				Name	Housing
+				BuiltInThumbnail	PlasticCase
+				Price	10
+				Time	6
+			}
+		]
+		Processes
+		[
+			{
+				Inputs	[ "Crypto Processor"; "Secure Memory"; "Host Connector"; "Network Interface" ]
+				Output	"Secure Board"
+			}
+			{
+				Inputs	[ Enclosure; "Redundant Power Supply"; "Tamper Mesh" ]
+				Output	Housing
+			}
+			{
+				Inputs	[ "Secure Board"; Housing ]
+				Output	Final
+			}
+		]
+		FinalTime	5
+	}
+	Features
+	[
+		{
+			Name	"HSM Firmware"
+			Spec	System
+			Description	"The code that generates, guards and uses the keys"
+			DevTime	10
+			CodeArt	1
+			Submarkets	[ 3; 2; 1 ]
+			Features
+			[
+				{
+					Name	"Key Generation & Storage"
+					Description	"Create keys inside the box and never let them out"
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+				}
+				{
+					Name	"AES & RSA Acceleration"
+					Description	"Do the maths in silicon"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 1; 4; 0 ]
+				}
+				{
+					Name	"PKCS#11 Interface"
+					Description	"The interface every application already speaks"
+					Unlock	1998
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 0; 1; 4 ]
+				}
+				{
+					Name	"Key Backup & Restore"
+					Description	"Split a key across cards so one lost card is not a disaster"
+					Unlock	2004
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 0; 3 ]
+				}
+				{
+					Name	"FIPS 140 Validation"
+					Description	"Pass the certification that procurement demands"
+					Unlock	2003
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 0; 4 ]
+				}
+				{
+					Name	"Elliptic Curve Acceleration"
+					Description	"Smaller keys, faster signatures"
+					Unlock	2005
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 1; 5; 0 ]
+				}
+				{
+					Name	"Key Partitioning"
+					Description	"Give every tenant their own private vault"
+					Unlock	2006
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 3; 0; 3 ]
+				}
+				{
+					Name	"Remote Attestation"
+					Description	"Prove to a stranger that the box is honest"
+					Unlock	2016
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 4; 0; 2 ]
+				}
+				{
+					Name	"Post-Quantum Algorithms"
+					Description	"Keys that outlive the quantum computer"
+					Unlock	2024
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 4; 0; 0 ]
+				}
+				{
+					Name	"Debug Port Left Enabled"
+					Description	"Leave the factory debug port switched on, for warranty work. <b><color=#FF0000>Fewer support calls, until a researcher finds it.</color></b>"
+					Unlock	2002
+					Level	3
+					DevTime	4
+					CodeArt	1
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"DebugPort\", true)) { Product.FixBugs(Product.Userbase * 0.005); if (Random() * Product.Userbase > 500000 * Product.Category.Popularity) { LaunchLawsuit(\"ExposedDebugPort\", Product.Sum * 0.8, 0.6); Product.DevCompany.AddFans(-Product.Userbase * 0.5, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.4); Product.KillAwareness(); Product.PutVar(\"DebugPort\", false); AddPopup(Localize(\"ExposedDebugPortNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+			]
+		}
+		{
+			Name	"Tamper Protection"
+			Spec	Hardware
+			Description	"Physical defences that destroy the secrets if anyone tries to get at them"
+			DevTime	6
+			CodeArt	0.9
+			Submarkets	[ 4; 0; 1 ]
+			Features
+			[
+				{
+					Name	"Tamper Detection"
+					Description	"Notice when someone opens, drills or probes the case"
+					Unlock	2000
+					Level	2
+					DevTime	6
+					CodeArt	0.9
+					Submarkets	[ 5; 0; 0 ]
+				}
+				{
+					Name	"Zeroization on Attack"
+					Description	"Wipe every key faster than an attacker can read it"
+					Level	1
+					DevTime	4
+					CodeArt	0.9
+					Submarkets	[ 4; 0; 0 ]
+				}
+				{
+					Name	"Environmental Sensors"
+					Description	"Temperature, voltage and light. Attackers change all three"
+					Unlock	2006
+					Level	2
+					DevTime	5
+					CodeArt	0.9
+					Submarkets	[ 4; 0; 0 ]
+				}
+				{
+					Name	"Hot-Swap Power"
+					Description	"Replace the power supply without switching the vault off"
+					Unlock	2005
+					Level	1
+					DevTime	4
+					CodeArt	0.9
+					Submarkets	[ 0; 2; 3 ]
+				}
+			]
+		}
+		{
+			Name	Connectivity
+			Spec	Network
+			Description	"How applications and administrators reach the keys"
+			DevTime	6
+			CodeArt	1
+			Submarkets	[ 1; 3; 3 ]
+			Features
+			[
+				{
+					Name	"Host Driver Package"
+					Description	"Drivers for every server operating system"
+					Unlock	2004
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 0; 2; 3 ]
+				}
+				{
+					Name	"Cloud KMS Integration"
+					Description	"Be the root of trust for somebody else's key service"
+					Unlock	2014
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 1; 1; 4 ]
+				}
+				{
+					Name	"Clustering & Failover"
+					Description	"Several vaults acting as one"
+					Unlock	2004
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 3; 3 ]
+				}
+				{
+					Name	"Remote Management"
+					Description	"Administer the vault without a trip to the datacentre"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 0; 4 ]
+				}
+				{
+					Name	"Load Balancing Across Devices"
+					Description	"Spread signing requests across the whole rack"
+					Unlock	2008
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 0; 5; 1 ]
+				}
+			]
+		}
+		{
+			Name	"Management Console"
+			Spec	2D
+			Description	"Where the keys are managed by people"
+			DevTime	5
+			CodeArt	0.3
+			Submarkets	[ 1; 0; 4 ]
+			Features
+			[
+				{
+					Name	"Key Lifecycle Console"
+					Description	"Create, rotate and retire keys"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 1; 0; 4 ]
+				}
+				{
+					Name	"Audit Log Viewer"
+					Description	"A record of every key use, kept for years"
+					Unlock	2003
+					Level	1
+					DevTime	4
+					CodeArt	0.3
+					Submarkets	[ 1; 0; 3 ]
+				}
+				{
+					Name	"Quorum Authentication"
+					Description	"Three of five smart cards to change anything important"
+					Unlock	2005
+					Level	2
+					DevTime	6
+					CodeArt	0.4
+					Submarkets	[ 3; 0; 3 ]
+				}
+				{
+					Name	"Command Line Utilities"
+					Description	"For the people who never want a mouse"
+					Unlock	2004
+					Level	1
+					DevTime	3
+					CodeArt	0.8
+					Submarkets	[ 0; 1; 2 ]
+				}
+			]
+		}
+	]
+}

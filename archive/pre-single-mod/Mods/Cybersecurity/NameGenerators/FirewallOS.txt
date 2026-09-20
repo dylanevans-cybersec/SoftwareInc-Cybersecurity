@@ -1,0 +1,42 @@
+-start(prefix)
+-prefix(core)
+Iron
+Bastion
+Aegis
+Sentinel
+Citadel
+Bulwark
+Fortress
+Rampart
+Stonewall
+Moat
+Trusted
+Hardened
+Open
+Secure
+Zero
+Packet
+Edge
+-core(suffix,end)
+OS
+Wall
+Gate
+Guard
+Shield
+Filter
+BSD
+WRT
+Gateway
+Firewall OS
+-suffix(end)
+ Pro
+ Plus
+ Enterprise
+ Community Edition
+ UTM
+ Next
+ 2000
+ XP
+ Lite
+ Appliance Edition
+-end(stop)

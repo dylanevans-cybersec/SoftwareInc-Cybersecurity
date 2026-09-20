@@ -1,0 +1,36 @@
+-start(prefix)
+-prefix(core)
+Perimeter
+Gateway
+Border
+Shield
+Tunnel
+Bastion
+Moat
+Sentry
+Snort
+Mailguard
+Webshield
+Clean
+Safe
+Secure
+-core(suffix,end)
+Access
+Gate
+Shield
+Guard
+Filter
+Proxy
+Defense
+Inspector
+Watch
+Wall
+-suffix(end)
+ Pro
+ Suite
+ Cloud
+ Enterprise
+ Edge
+ Total
+ Next
+-end(stop)

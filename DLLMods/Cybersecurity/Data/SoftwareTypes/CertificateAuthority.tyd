@@ -1,0 +1,307 @@
+SoftwareType
+{
+	Name	"Certificate Authority"
+	Description	"Issue, sign and revoke the certificates that let computers decide who to trust. Firewalls, VPNs and secure web servers all need one."
+	Unlock	1995
+	Random	0.1
+	OptimalDevTime	56
+	OneClient	False
+	InHouse	True
+	NameGenerator	CertificateAuthority
+	SubmarketNames	[ Trust; Automation; Compliance ]
+	Categories
+	[
+		{
+			Name	"Issuing CA"
+			Description	"Issue and sign certificates, whether for the whole internet or for one company's own machines"
+			Unlock	1995
+			Popularity	0.7
+			Submarkets	[ 4; 2; 3 ]
+			TimeScale	1
+			Retention	60
+			IdealPrice	1000
+			Iterative	0.7
+		}
+		{
+			Name	"Lifecycle Management"
+			Description	"Find, renew and replace every certificate before one quietly expires and takes production down"
+			Unlock	2014
+			Popularity	0.65
+			Submarkets	[ 1; 5; 2 ]
+			TimeScale	0.57
+			Retention	36
+			IdealPrice	1200
+			Iterative	0.8
+		}
+	]
+	Features
+	[
+		{
+			Name	"CA Core & Issuance"
+			Spec	System
+			Description	"The vault, the hierarchy, and the engine that signs and revokes certificates"
+			DevTime	18
+			CodeArt	1
+			Submarkets	[ 3; 1; 2 ]
+			Features
+			[
+				{
+					Name	"Offline Root Key Ceremony"
+					Description	"Three people, a safe, a camera and a very long checklist"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Intermediate CA Hierarchy"
+					Description	"Keep the root offline and let subordinates do the work"
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 1; 1 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Domain Validation Automation"
+					Description	"Prove control of a domain without a single phone call"
+					Unlock	2003
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 3; 2 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Hardware Key Storage"
+					Description	"Keep private keys inside a box that fights back"
+					Unlock	2000
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"High-Availability Signing Cluster"
+					Description	"Never be the reason a whole country's websites stop loading"
+					Unlock	2008
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 3; 1 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Root Key Rotation"
+					Description	"Replace the foundation without stopping the building"
+					Unlock	2010
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 0; 2 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"X.509 Certificate Issuance"
+					Description	"The basic act of vouching for someone"
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 1; 0 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Certificate Revocation Lists"
+					Description	"A big file of people you no longer trust"
+					Unlock	1996
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Code Signing Certificates"
+					Description	"Let developers prove the program really came from them"
+					Unlock	1998
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"OCSP Responder"
+					Description	"Answer 'is this still valid' billions of times a day"
+					Unlock	2000
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 2; 2; 0 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Extended Validation"
+					Description	"A green padlock for people who pay for one"
+					Unlock	2005
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 4; 0; 2 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"OCSP Stapling"
+					Description	"Let servers carry their own proof of validity"
+					Unlock	2010
+					Level	2
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 1; 3; 0 ]
+				}
+				{
+					Name	"Certificate Transparency Logging"
+					Description	"Publish every certificate so mis-issuance cannot stay secret"
+					Unlock	2013
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 4; 0; 2 ]
+				}
+				{
+					Name	"Post-Quantum Signatures"
+					Description	"Signatures that do not fall over when the big quantum computer arrives"
+					Unlock	2024
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 4; 0; 0 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Rubber-Stamp Validation"
+					Description	"Skip the identity checks and issue to anyone who pays. <b><color=#FF0000>+{Currency:20} per certificate sold.</color></b>"
+					Unlock	2001
+					Level	3
+					DevTime	4
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ "Issuing CA" ]
+					Script_EndOfDay	"if (Product.GetVar(\"RubberStamp\", true)) { if (Random() * Product.Userbase > 600000 * Product.Category.Popularity) { LaunchLawsuit(\"MisissuedCertificates\", Product.Sum * 1.5, 0.7); Product.DevCompany.AddFans(-Product.Userbase * 0.6, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.1); Product.KillAwareness(); Product.PutVar(\"RubberStamp\", false); AddPopup(Localize(\"RubberStampNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+					Script_AfterSales	"if (Product.GetVar(\"RubberStamp\", true)) { Product.DevCompany.MakeTransaction((PhysicalSales + DigitalSales) * 20, Deals, \"Bulk Issuance Fees\"); }"
+				}
+			]
+		}
+		{
+			Name	"Enrollment & Automation"
+			Spec	Network
+			Description	"How machines and people actually get their certificates"
+			DevTime	6
+			CodeArt	1
+			Submarkets	[ 1; 4; 1 ]
+			Features
+			[
+				{
+					Name	"Web Enrollment Portal"
+					Description	"A form, a queue and an approver on holiday"
+					Unlock	1998
+					Level	1
+					DevTime	5
+					CodeArt	0.7
+					Submarkets	[ 0; 2; 2 ]
+				}
+				{
+					Name	"Expiry Alerts"
+					Description	"Remind someone before it is somebody's emergency"
+					Unlock	2004
+					Level	1
+					DevTime	3
+					CodeArt	1
+					Submarkets	[ 0; 2; 2 ]
+				}
+				{
+					Name	"SCEP & EST Enrollment"
+					Description	"Let routers and printers request their own certificates"
+					Unlock	2003
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 3; 1 ]
+				}
+				{
+					Name	"Certificate Discovery Scanner"
+					Description	"Find the certificates nobody remembers issuing"
+					Unlock	2014
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 3; 2 ]
+					SoftwareCategories	[ "Lifecycle Management" ]
+				}
+				{
+					Name	"ACME Automation"
+					Description	"Free certificates, issued by robots, renewed by robots"
+					Unlock	2015
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 0; 5; 0 ]
+				}
+				{
+					Name	"Auto-Renewal Agents"
+					Description	"A tiny daemon that saves a Saturday every ninety days"
+					Unlock	2016
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 0; 5; 0 ]
+					SoftwareCategories	[ "Lifecycle Management" ]
+				}
+			]
+		}
+		{
+			Name	Console
+			Spec	2D
+			Description	"Where the certificates are counted and blamed"
+			DevTime	5
+			CodeArt	0.3
+			Submarkets	[ 0; 2; 3 ]
+			Features
+			[
+				{
+					Name	"Certificate Inventory"
+					Description	"A list of every certificate, who owns it and when it dies"
+					Unlock	1998
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 2; 3 ]
+				}
+				{
+					Name	"Policy Templates"
+					Description	"Sensible defaults for key size, lifetime and usage"
+					Unlock	1998
+					Level	1
+					DevTime	4
+					CodeArt	0.5
+					Submarkets	[ 1; 1; 2 ]
+					SoftwareCategories	[ "Issuing CA" ]
+				}
+				{
+					Name	"Compliance Audit Reports"
+					Description	"Everything an auditor wants to see, in the order they want to see it"
+					Unlock	2005
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 0; 0; 5 ]
+				}
+			]
+		}
+	]
+}

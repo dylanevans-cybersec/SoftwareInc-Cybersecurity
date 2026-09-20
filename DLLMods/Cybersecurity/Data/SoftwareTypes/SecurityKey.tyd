@@ -1,0 +1,315 @@
+SoftwareType
+{
+	Name	"Security Key"
+	Description	"A small piece of hardware that proves you are you. Phishing-proof, keychain-sized and impossible to remember the location of."
+	Unlock	2005
+	Random	0.15
+	Popularity	0.7
+	Retention	42
+	IdealPrice	70
+	Iterative	0.72
+	OptimalDevTime	68
+	OneClient	False
+	InHouse	False
+	Hardware	True
+	NameGenerator	SecurityKey
+	SubmarketNames	[ Security; Convenience; Compatibility ]
+	Manufacturing
+	{
+		Components
+		[
+			{
+				Name	"Secure Element"
+				BuiltInThumbnail	Microchip
+				Price	8
+				Time	8
+			}
+			{
+				Name	Microcontroller
+				BuiltInThumbnail	Microchip
+				Price	4
+				Time	4
+			}
+			{
+				Name	"USB Connector"
+				BuiltInThumbnail	USB
+				Price	2
+				Time	2
+			}
+			{
+				Name	"NFC Antenna"
+				BuiltInThumbnail	Antenna
+				Price	3
+				Time	4
+				DependsOn	"NFC Tap"
+			}
+			{
+				Name	"Fingerprint Sensor"
+				BuiltInThumbnail	Fingerprint
+				Price	10
+				Time	8
+				DependsOn	"Biometric Match"
+			}
+			{
+				Name	"Touch Contact"
+				BuiltInThumbnail	Touch
+				Price	1
+				Time	2
+				DependsOn	"User Presence Test"
+			}
+			{
+				Name	"Plastic Shell"
+				BuiltInThumbnail	Plastic
+				Price	2
+				Time	2
+			}
+			{
+				Name	"Tamper Seal"
+				BuiltInThumbnail	PlasticCase
+				Price	1
+				Time	2
+			}
+			{
+				Name	"Key Board"
+				BuiltInThumbnail	PCB
+				Price	2
+				Time	4
+			}
+			{
+				Name	"Key Casing"
+				BuiltInThumbnail	PlasticCase
+				Price	1
+				Time	2
+			}
+		]
+		Processes
+		[
+			{
+				Inputs	[ "Secure Element"; Microcontroller; "USB Connector"; "NFC Antenna" ]
+				Output	"Key Board"
+			}
+			{
+				Inputs	[ "Plastic Shell"; "Fingerprint Sensor"; "Touch Contact"; "Tamper Seal" ]
+				Output	"Key Casing"
+			}
+			{
+				Inputs	[ "Key Board"; "Key Casing" ]
+				Output	Final
+			}
+		]
+		FinalTime	2
+	}
+	Features
+	[
+		{
+			Name	"Firmware & Protocols"
+			Spec	System
+			Description	"The code inside the tamper-resistant chip and the languages it speaks to the outside world"
+			DevTime	16
+			CodeArt	1
+			Submarkets	[ 3; 1; 1 ]
+			Features
+			[
+				{
+					Name	"One-Time Password Generator"
+					Description	"Six digits that change every thirty seconds"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 2; 1; 2 ]
+				}
+				{
+					Name	"Challenge-Response Auth"
+					Description	"Prove you hold the key without ever showing it"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Anti-Tamper Response"
+					Description	"Wipe the secrets if someone opens the case"
+					Unlock	2009
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 0 ]
+				}
+				{
+					Name	"Secure Boot"
+					Description	"Refuse to run firmware nobody signed"
+					Unlock	2014
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 0 ]
+				}
+				{
+					Name	"Firmware Signing"
+					Description	"Only the vendor can update what runs on the key"
+					Unlock	2014
+					Level	2
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Side-Channel Hardening"
+					Description	"Make timing and power draw reveal nothing"
+					Unlock	2018
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 5; 0; 0 ]
+				}
+				{
+					Name	"Smart Card / PIV"
+					Description	"Enterprise-grade identity on a key"
+					Unlock	2006
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 0; 3 ]
+				}
+				{
+					Name	"OpenPGP Applet"
+					Description	"Sign your email and your commits with a key that cannot be copied"
+					Unlock	2010
+					Level	2
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 0; 2 ]
+				}
+				{
+					Name	"FIDO U2F"
+					Description	"Second factor that will not be phished"
+					Unlock	2014
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 3; 2; 3 ]
+				}
+				{
+					Name	"Attestation Certificates"
+					Description	"Let a website confirm the key is genuine hardware"
+					Unlock	2015
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+				}
+				{
+					Name	"FIDO2 / WebAuthn"
+					Description	"Log in without a password at all"
+					Unlock	2018
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 3; 3; 4 ]
+				}
+				{
+					Name	"Passkey Support"
+					Description	"Credentials that sync between devices and still cannot be phished"
+					Unlock	2022
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 4; 4 ]
+				}
+				{
+					Name	"Predictable Seed"
+					Description	"Generate keys from a friendly, easy-to-provision seed. <b><color=#FF0000>+{Currency:0.03} per user per day.</color></b>"
+					Unlock	2007
+					Level	3
+					DevTime	4
+					CodeArt	1
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"PredictableSeed\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.03, Sales, \"Bulk Provisioning Contracts\"); if (Random() * Product.Userbase > 400000 * Product.Category.Popularity) { LaunchLawsuit(\"WeakKeys\", Product.Sum * 1.0, 0.7); Product.DevCompany.AddFans(-Product.Userbase * 0.7, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.2); Product.KillAwareness(); Product.PutVar(\"PredictableSeed\", false); AddPopup(Localize(\"PredictableSeedNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+			]
+		}
+		{
+			Name	"Hardware Interfaces"
+			Spec	Hardware
+			Description	"How the key connects to the rest of the world"
+			DevTime	6
+			CodeArt	0.9
+			Submarkets	[ 1; 4; 3 ]
+			Features
+			[
+				{
+					Name	"USB HID Interface"
+					Description	"Show up as a keyboard and type the code for you"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 1; 1; 3 ]
+				}
+				{
+					Name	"User Presence Test"
+					Description	"A touch contact proving an actual human is there"
+					Unlock	2008
+					Level	1
+					DevTime	3
+					CodeArt	0.9
+					Submarkets	[ 2; 3; 0 ]
+				}
+				{
+					Name	"NFC Tap"
+					Description	"Hold it against a phone and you are in"
+					Unlock	2014
+					Level	2
+					DevTime	5
+					CodeArt	0.9
+					Submarkets	[ 0; 4; 2 ]
+				}
+				{
+					Name	"Biometric Match"
+					Description	"Match the finger on the sensor to the finger it was enrolled with"
+					Unlock	2018
+					Level	2
+					DevTime	7
+					CodeArt	0.9
+					Submarkets	[ 3; 3; 0 ]
+				}
+			]
+		}
+		{
+			Name	"Companion Software"
+			Spec	2D
+			Description	"Utilities that manage the key and its owner"
+			DevTime	5
+			CodeArt	0.5
+			Submarkets	[ 0; 2; 3 ]
+			Features
+			[
+				{
+					Name	"Key Manager Utility"
+					Description	"Change the PIN, reset the key, forget both"
+					Level	1
+					DevTime	4
+					CodeArt	0.5
+					Submarkets	[ 0; 1; 3 ]
+				}
+				{
+					Name	"Browser Extension"
+					Description	"Let websites talk to your key without a driver"
+					Unlock	2014
+					Level	1
+					DevTime	4
+					CodeArt	0.7
+					Submarkets	[ 0; 2; 3 ]
+				}
+				{
+					Name	"Fleet Provisioning Console"
+					Description	"Enroll a thousand keys in an afternoon"
+					Unlock	2016
+					Level	2
+					DevTime	6
+					CodeArt	0.5
+					Submarkets	[ 1; 0; 5 ]
+				}
+			]
+		}
+	]
+}

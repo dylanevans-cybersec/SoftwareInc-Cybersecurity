@@ -1,0 +1,295 @@
+SoftwareType
+{
+	Name	SIEM
+	Description	"Security Information and Event Management: collect every log in the company, then find the one line that matters. Running one in-house needs analysts who know what they are looking at."
+	Unlock	2000
+	Random	0.1
+	Popularity	0.65
+	Retention	42
+	IdealPrice	2500
+	Iterative	0.72
+	OptimalDevTime	100
+	OneClient	False
+	InHouse	True
+	NameGenerator	SIEM
+	SubmarketNames	[ Visibility; Compliance; Automation ]
+	Features
+	[
+		{
+			Name	"Log Pipeline & Analytics"
+			Spec	System
+			Description	"Get the logs in, get them parsed, then turn a flood of events into a short list of things worth a human's time"
+			DevTime	24
+			CodeArt	1
+			Submarkets	[ 3; 1; 1 ]
+			Features
+			[
+				{
+					Name	"Syslog Collector"
+					Description	"Listen on UDP 514 and hope for the best"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 0 ]
+				}
+				{
+					Name	"Windows Event Forwarding"
+					Description	"Pull the event logs out of every desktop"
+					Unlock	2003
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 0; 0 ]
+				}
+				{
+					Name	"Log Parsing & Normalization"
+					Description	"Turn forty log formats into one"
+					Unlock	2004
+					Level	1
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 3; 1; 1 ]
+				}
+				{
+					Name	"Long-Term Log Storage"
+					Description	"Keep everything for seven years, just in case"
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 1; 3; 0 ]
+				}
+				{
+					Name	"Agentless Collectors"
+					Description	"Read logs remotely without installing anything on the source"
+					Unlock	2008
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 2; 0; 2 ]
+				}
+				{
+					Name	"Real-Time Stream Processing"
+					Description	"Analyse events as they happen, not at 3am the next day"
+					Unlock	2010
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 3; 0; 2 ]
+				}
+				{
+					Name	"Security Data Lake"
+					Description	"Petabytes of telemetry in one queryable place"
+					Unlock	2016
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Server	0.0005
+					Submarkets	[ 3; 2; 0 ]
+				}
+				{
+					Name	"Correlation Rules"
+					Description	"If A then B within five minutes, page someone"
+					Unlock	2005
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+				}
+				{
+					Name	"Alerting & Notification"
+					Description	"Email, SMS and a pager that never stops"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 2; 0; 3 ]
+				}
+				{
+					Name	"Case Management"
+					Description	"Track every incident from alert to lessons learned"
+					Unlock	2009
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 1; 2; 4 ]
+				}
+				{
+					Name	"User & Entity Behavior Analytics"
+					Description	"Notice that Dave from accounting has never logged in at 4am before"
+					Unlock	2013
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 5; 0; 1 ]
+				}
+				{
+					Name	"Threat Hunting Workbench"
+					Description	"A notebook for analysts who go looking instead of waiting"
+					Unlock	2014
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 0; 2 ]
+				}
+				{
+					Name	"Anomaly Detection Models"
+					Description	"Machine learning to find the needle, then generate more haystack"
+					Unlock	2018
+					Level	2
+					DevTime	10
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 4; 0; 2 ]
+				}
+				{
+					Name	"Automated Response Playbooks"
+					Description	"Block, isolate, ticket and notify without waking anyone up"
+					Unlock	2016
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 1; 0; 6 ]
+				}
+				{
+					Name	"Compliance Theater"
+					Description	"Every dashboard shows green checkmarks, whatever is actually happening. <b><color=#FF0000>+{Currency:0.05} per user per day.</color></b>"
+					Unlock	2006
+					Level	3
+					DevTime	5
+					CodeArt	1
+					Submarkets	0
+					Script_EndOfDay	"if (Product.GetVar(\"ComplianceTheater\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.05, Sales, \"Audit Season Upsells\"); if (Random() * Product.Userbase > 900000 * Product.Category.Popularity) { LaunchLawsuit(\"ComplianceTheater\", Product.Sum * 0.35, 0.5); Product.DevCompany.AddFans(-Product.Userbase * 0.4, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.6); Product.KillAwareness(); Product.PutVar(\"ComplianceTheater\", false); AddPopup(Localize(\"ComplianceTheaterNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+				{
+					Name	"Encrypted Log Transport"
+					Description	"Do not send secrets across the wire in plain text"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 2; 2; 0 ]
+				}
+				{
+					Name	"Compliance Report Packs"
+					Description	"Prebuilt reports for every acronym an auditor can think of"
+					Unlock	2008
+					Level	1
+					DevTime	5
+					CodeArt	0.7
+					Submarkets	[ 0; 5; 0 ]
+				}
+				{
+					Name	"Legal Hold & Retention"
+					Description	"Do not delete anything a lawyer might want"
+					Unlock	2009
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 0; 4; 0 ]
+				}
+				{
+					Name	"Tamper-Evident Storage"
+					Description	"Hash-chained logs that prove they have not been edited"
+					Unlock	2007
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 1; 4; 0 ]
+				}
+			]
+		}
+		{
+			Name	"Collectors & Integrations"
+			Spec	Network
+			Description	"Connectors to everything that can produce a log line"
+			DevTime	6
+			CodeArt	1
+			Submarkets	[ 3; 0; 2 ]
+			Features
+			[
+				{
+					Name	"Firewall Log Connector"
+					Description	"Understand what the perimeter is dropping and why"
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 0 ]
+				}
+				{
+					Name	"Endpoint Connector"
+					Description	"Pull detections from every endpoint agent"
+					Unlock	2008
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 0; 1 ]
+				}
+				{
+					Name	"Cloud Log Connectors"
+					Description	"Somebody else's servers, still your logs"
+					Unlock	2016
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 2; 1; 2 ]
+				}
+				{
+					Name	"Orchestration Integrations"
+					Description	"Talk to ticketing, chat and every tool you already own"
+					Unlock	2016
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 0; 0; 5 ]
+				}
+			]
+		}
+		{
+			Name	Console
+			Spec	2D
+			Description	"Search boxes, charts and one very big red number"
+			DevTime	6
+			CodeArt	0.3
+			Submarkets	[ 1; 1; 3 ]
+			Features
+			[
+				{
+					Name	"Search Query Language"
+					Description	"A whole new syntax for analysts to learn"
+					Level	1
+					DevTime	4
+					CodeArt	0.7
+					Submarkets	[ 1; 0; 3 ]
+				}
+				{
+					Name	Dashboards
+					Description	"Twenty widgets, eighteen of them useless"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 1; 1; 3 ]
+				}
+				{
+					Name	"Executive Reports"
+					Description	"One page, three colours, no jargon"
+					Unlock	2005
+					Level	1
+					DevTime	4
+					CodeArt	0.3
+					Submarkets	[ 0; 3; 1 ]
+				}
+				{
+					Name	"Incident Timeline View"
+					Description	"See the attack unfold event by event"
+					Unlock	2012
+					Level	2
+					DevTime	6
+					CodeArt	0.3
+					Submarkets	[ 2; 0; 3 ]
+				}
+			]
+		}
+	]
+}

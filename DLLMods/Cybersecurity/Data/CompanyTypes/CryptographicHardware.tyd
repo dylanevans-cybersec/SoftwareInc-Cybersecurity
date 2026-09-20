@@ -1,0 +1,14 @@
+CompanyType
+{
+	Specialization		"Cryptographic Hardware"
+	PerYear			0.2
+	Min			1
+	Max			2
+	Types
+	[
+		{
+		Software	"HSM"
+		Chance		1
+		}
+	]
+}

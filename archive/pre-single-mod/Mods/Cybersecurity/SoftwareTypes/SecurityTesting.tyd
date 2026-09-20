@@ -1,0 +1,354 @@
+SoftwareType
+{
+	Name	"Security Testing & Forensics"
+	Description	"Find the holes before somebody else does, or work out afterwards how they got in."
+	Unlock	1998
+	Random	0.15
+	OptimalDevTime	52
+	OneClient	False
+	InHouse	True
+	OSSupport	[ Computer ]
+	NameGenerator	SecurityTesting
+	SubmarketNames	[ Coverage; Depth; Reporting ]
+	Categories
+	[
+		{
+			Name	"Vulnerability Testing"
+			Description	"Scan systems for known holes, then attack them the way a real intruder would"
+			Unlock	1998
+			Popularity	0.65
+			Submarkets	[ 4; 3; 3 ]
+			TimeScale	1
+			Retention	36
+			IdealPrice	1000
+			Iterative	0.78
+		}
+		{
+			Name	"Digital Forensics"
+			Description	"Preserve, examine and explain the evidence after an incident"
+			Unlock	2001
+			Popularity	0.5
+			Submarkets	[ 3; 4; 4 ]
+			TimeScale	0.56
+			Retention	48
+			IdealPrice	2500
+			Iterative	0.7
+		}
+	]
+	Features
+	[
+		{
+			Name	"Analysis Engine"
+			Spec	System
+			Description	"The engine that finds, exploits or examines"
+			DevTime	10
+			CodeArt	1
+			Submarkets	[ 3; 3; 1 ]
+			Features
+			[
+				{
+					Name	"Port Scanner"
+					Description	"Knock on every door"
+					Unlock	1998
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 3; 1; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Service Fingerprinting"
+					Description	"Work out exactly what is answering"
+					Unlock	1999
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 1; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Vulnerability Database Matching"
+					Description	"Compare every version number with a very long list of bad news"
+					Unlock	2000
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 5; 0; 1 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Authenticated Scanning"
+					Description	"Log in and look properly instead of guessing from outside"
+					Unlock	2004
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 4; 2; 1 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Exploit Framework"
+					Description	"A library of ways in, with a friendly menu"
+					Unlock	2003
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 1; 5; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Payload Generator"
+					Description	"Build the thing that runs once you are in"
+					Unlock	2005
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 0; 5; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Fuzzing Engine"
+					Description	"Throw garbage at a program until it falls over"
+					Unlock	2008
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 4; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Disk Imaging"
+					Description	"A bit-for-bit copy that can stand up in court"
+					Unlock	2001
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 2; 1 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+				{
+					Name	"File Carving"
+					Description	"Recover files that were deleted and forgotten"
+					Unlock	2004
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Submarkets	[ 1; 5; 0 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+				{
+					Name	"Memory Forensics"
+					Description	"What was running in RAM when the power went out"
+					Unlock	2008
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 5; 0 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+				{
+					Name	"Timeline Reconstruction"
+					Description	"Put every event in order, then tell the story"
+					Unlock	2010
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 3; 2 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+				{
+					Name	"Exploit Stockpile"
+					Description	"Sell the vulnerabilities you find to the highest bidder before reporting them. <b><color=#FF0000>+{Currency:0.2} per user per day.</color></b>"
+					Unlock	2006
+					Level	3
+					DevTime	5
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ "Vulnerability Testing" ]
+					Script_EndOfDay	"if (Product.GetVar(\"ExploitStockpile\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.2, Deals, \"Exploit Broker Fees\"); if (Random() * Product.Userbase > 250000 * Product.Category.Popularity) { LaunchLawsuit(\"ExploitStockpile\", Product.Sum * 1.2, 0.7); Product.DevCompany.AddFans(-Product.Userbase * 0.7, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.25); Product.KillAwareness(); Product.PutVar(\"ExploitStockpile\", false); AddPopup(Localize(\"ExploitStockpileNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+			]
+		}
+		{
+			Name	"Target Interaction"
+			Spec	Network
+			Description	"Reaching out to targets, networks and remote evidence"
+			DevTime	7
+			CodeArt	1
+			Submarkets	[ 3; 3; 1 ]
+			Features
+			[
+				{
+					Name	"Network Discovery"
+					Description	"Find every machine before scanning any of them"
+					Unlock	1998
+					Level	1
+					DevTime	4
+					CodeArt	1
+					Submarkets	[ 4; 0; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Web Application Scanning"
+					Description	"Crawl the site and poke every form"
+					Unlock	2005
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 2; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Cloud Asset Discovery"
+					Description	"Find the servers somebody spun up and forgot"
+					Unlock	2015
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 4; 1; 1 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Credential Attacks"
+					Description	"Guess the password. Then guess the next one"
+					Unlock	2004
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 4; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Wireless Attacks"
+					Description	"The office wifi is not as private as it looks"
+					Unlock	2007
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 0; 4; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Command & Control Simulation"
+					Description	"Behave like a real intruder, without the crime"
+					Unlock	2012
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 1; 5; 0 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Network Packet Capture"
+					Description	"Record everything that crossed the wire"
+					Unlock	2002
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 2; 3; 1 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+				{
+					Name	"Remote Evidence Acquisition"
+					Description	"Collect evidence from a laptop in another country"
+					Unlock	2010
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 3; 2 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+			]
+		}
+		{
+			Name	"Console & Reporting"
+			Spec	2D
+			Description	"Turn findings into something a manager will act on"
+			DevTime	6
+			CodeArt	0.3
+			Submarkets	[ 1; 1; 4 ]
+			Features
+			[
+				{
+					Name	"Report Generator"
+					Description	"A PDF that looks worth the invoice"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 0; 4 ]
+				}
+				{
+					Name	"Scan Scheduler"
+					Description	"Scan at 3am so nobody notices"
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 1; 0; 3 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Compliance Templates"
+					Description	"Map every finding to a regulation"
+					Unlock	2006
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 0; 5 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Risk Scoring"
+					Description	"A single number for a very complicated situation"
+					Unlock	2007
+					Level	2
+					DevTime	6
+					CodeArt	0.4
+					Submarkets	[ 2; 1; 4 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Session Manager"
+					Description	"Keep track of every foothold"
+					Unlock	2003
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 0; 3; 1 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Attack Path Graph"
+					Description	"Show how three small problems become one large one"
+					Unlock	2014
+					Level	2
+					DevTime	7
+					CodeArt	0.2
+					Submarkets	[ 1; 4; 1 ]
+					SoftwareCategories	[ "Vulnerability Testing" ]
+				}
+				{
+					Name	"Case Manager"
+					Description	"Every exhibit, every note, every examiner"
+					Unlock	2003
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 1; 4 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+				{
+					Name	"Chain of Custody Tracking"
+					Description	"Who touched the evidence, and when"
+					Unlock	2004
+					Level	2
+					DevTime	6
+					CodeArt	0.3
+					Submarkets	[ 1; 0; 5 ]
+					SoftwareCategories	[ "Digital Forensics" ]
+				}
+			]
+		}
+	]
+}

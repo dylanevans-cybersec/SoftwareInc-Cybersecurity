@@ -1,0 +1,35 @@
+-start(prefix)
+-prefix(core)
+Intel
+Threat
+Cyber
+Recon
+Raven
+Oracle
+Augur
+Hunter
+Spyglass
+Harbinger
+Sigint
+Darkwatch
+Foresight
+Kestrel
+-core(suffix,end)
+Intel
+Feed
+Hub
+Platform
+Watch
+Radar
+Scope
+Link
+Exchange
+-suffix(end)
+ Pro
+ Enterprise
+ Cloud
+ Premium
+ Ultimate
+ Insight
+ Global
+-end(stop)

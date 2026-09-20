@@ -1,0 +1,36 @@
+-start(prefix)
+-prefix(core)
+Key
+Vault
+Ident
+Gate
+Passport
+Badge
+Sesame
+Warden
+Onelogin
+Trusted
+Access
+Cipher
+Lockbox
+Verify
+-core(suffix,end)
+Keeper
+ID
+Pass
+Sign
+Gate
+Vault
+Guard
+Manager
+Wallet
+Pro
+-suffix(end)
+ Enterprise
+ for Teams
+ Cloud
+ Business
+ Premium
+ Zero
+ One
+-end(stop)

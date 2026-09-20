@@ -1,0 +1,21 @@
+Furniture
+	{
+	Base			BigServerRack
+	Name			"Key Vault Rack"
+	Thumbnail		"Thumbs/KeyVaultRack.png"
+	Server			{ RemoveComponent True }
+	Furniture
+		{
+		LocalizedName		"Key Vault Rack"
+		ButtonDescription	"Passwords, keys and certificates, locked in a box that fights back."
+		Type			"Key Vault"
+		Category		[ Server ]
+		FunctionCategory	Server
+		UpgradeTo		""
+		Cost			8000
+		UnlockYear		1998
+		Wattage			40
+		Noisiness		2
+		ColorTertiaryDefault	FFC21AFF
+		}
+	}

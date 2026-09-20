@@ -1,0 +1,39 @@
+-start(prefix)
+-prefix(core)
+Sentinel
+Talon
+Vigil
+Osprey
+Nightwatch
+Cerberus
+Warden
+Pathfinder
+Tripwire
+Lookout
+Ironclad
+Outpost
+Watchtower
+Bloodhound
+Hawkeye
+-core(suffix,end)
+Endpoint
+EDR
+Shield
+Guard
+Agent
+Sensor
+Response
+Protect
+Hunter
+Falconer
+-suffix(end)
+ Pro
+ Enterprise
+ Complete
+ Cloud
+ XDR
+ One
+ 360
+ Elite
+ for Business
+-end(stop)

@@ -1,0 +1,5 @@
+SoftwareType
+{
+	Name		Antivirus
+	Override	Delete
+}

@@ -1,0 +1,14 @@
+CompanyType
+{
+	Specialization		"Endpoint Security"
+	PerYear			0.2
+	Min			3
+	Max			4
+	Types
+	[
+		{
+		Software	"Endpoint Protection"
+		Chance		1
+		}
+	]
+}

@@ -1,0 +1,67 @@
+-start(prefix)
+-prefix(core)
+Secure
+Trusted
+Cyber
+Net
+Network
+Edge
+Perimeter
+Boundary
+ZeroTrust
+Packet
+Traffic
+Sentinel
+Guardian
+Aegis
+Bastion
+Enterprise
+NextGen
+Unified
+Advanced
+Legacy
+Firewall Mc
+Spicy
+Angry
+-core(suffix,end)
+Firewall
+Gateway
+Gate
+Shield
+Guard
+Barrier
+Filter
+Inspector
+Packet Filter
+Packet Guard
+Traffic Guard
+Port Guard
+Edge Guard
+Net Guard
+Policy Engine
+Control
+Defense
+Sentinel
+Thing
+Doer
+-suffix(end)
+ Pro
+ Plus
+ Max
+ Ultra
+ Advanced
+ Ultimate
+ Enterprise
+ Business Edition
+ Unified
+ 360
+ Total
+ Secure
+ Next
+ Mk II
+ Mk III
+ Reloaded
+ SE
+ of Doom
+ but Secure
+-end(stop)

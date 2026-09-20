@@ -1,0 +1,14 @@
+CompanyType
+{
+	Specialization		"Data Protection"
+	PerYear			0.2
+	Min			2
+	Max			3
+	Types
+	[
+		{
+		Software	"Data Protection"
+		Chance		1
+		}
+	]
+}

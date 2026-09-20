@@ -1,0 +1,21 @@
+Furniture
+	{
+	Base			BigServerRack
+	Name			"Firewall Appliance Rack"
+	Thumbnail		"Thumbs/FirewallApplianceRack.png"
+	Server			{ RemoveComponent True }
+	Furniture
+		{
+		LocalizedName		"Firewall Appliance Rack"
+		ButtonDescription	"Keeps the internet where it belongs. Limits the damage when someone tries to break in."
+		Type			"Firewall Appliance"
+		Category		[ Server ]
+		FunctionCategory	Server
+		UpgradeTo		""
+		Cost			3500
+		UnlockYear		1995
+		Wattage			60
+		Noisiness		3
+		ColorTertiaryDefault	FF4D2EFF
+		}
+	}

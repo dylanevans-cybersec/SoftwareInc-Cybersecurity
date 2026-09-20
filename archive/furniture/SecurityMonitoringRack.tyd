@@ -1,0 +1,21 @@
+Furniture
+	{
+	Base			BigServerRack
+	Name			"Security Monitoring Rack"
+	Thumbnail		"Thumbs/SecurityMonitoringRack.png"
+	Server			{ RemoveComponent True }
+	Furniture
+		{
+		LocalizedName		"Security Monitoring Rack"
+		ButtonDescription	"Reads every log in the building so somebody notices before the customers do."
+		Type			"Security Monitor"
+		Category		[ Server ]
+		FunctionCategory	Server
+		UpgradeTo		""
+		Cost			6000
+		UnlockYear		2003
+		Wattage			90
+		Noisiness		4
+		ColorTertiaryDefault	2E8BFFFF
+		}
+	}

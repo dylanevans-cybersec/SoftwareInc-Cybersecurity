@@ -1,0 +1,36 @@
+-start(prefix)
+-prefix(core)
+Red
+Black
+Probe
+Breach
+Exploit
+Hunter
+Scout
+Crowbar
+Lockpick
+Pathfinder
+Autopsy
+Evidence
+Trace
+Sherlock
+-core(suffix,end)
+Scan
+Scanner
+Kit
+Toolkit
+Lab
+Forensics
+Suite
+Framework
+Probe
+Audit
+-suffix(end)
+ Pro
+ Enterprise
+ Community Edition
+ Ultimate
+ Workbench
+ Elite
+ X
+-end(stop)

@@ -1,0 +1,14 @@
+CompanyType
+{
+	Specialization		"Identity Security"
+	PerYear			0.2
+	Min			2
+	Max			3
+	Types
+	[
+		{
+		Software	"Identity & Access"
+		Chance		1
+		}
+	]
+}

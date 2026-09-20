@@ -1,0 +1,19 @@
+CompanyType
+{
+	Specialization		"Network Security"
+	PerYear			0.2
+	Min			2
+	Max			3
+	Frameworks		False
+	Types
+	[
+		{
+		Software	"Firewall OS"
+		Chance		1
+		}
+		{
+		Software	"Firewall"
+		Chance		0.5
+		}
+	]
+}

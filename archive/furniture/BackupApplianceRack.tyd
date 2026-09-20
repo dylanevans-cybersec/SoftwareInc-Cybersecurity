@@ -1,0 +1,21 @@
+Furniture
+	{
+	Base			BigServerRack
+	Name			"Backup Appliance Rack"
+	Thumbnail		"Thumbs/BackupApplianceRack.png"
+	Server			{ RemoveComponent True }
+	Furniture
+		{
+		LocalizedName		"Backup Appliance Rack"
+		ButtonDescription	"Yesterday, safely stored. Makes ransomware a bad afternoon instead of a bad year."
+		Type			"Backup Appliance"
+		Category		[ Server ]
+		FunctionCategory	Server
+		UpgradeTo		""
+		Cost			4500
+		UnlockYear		1990
+		Wattage			75
+		Noisiness		3
+		ColorTertiaryDefault	2ECC71FF
+		}
+	}

@@ -1,0 +1,30 @@
+CompanyType
+{
+	Specialization		"Security Suite"
+	PerYear			0.2
+	Min			1
+	Max			2
+	Types
+	[
+		{
+		Software	"Endpoint Protection"
+		Chance		0.4
+		}
+		{
+		Software	"Identity & Access"
+		Chance		0.3
+		}
+		{
+		Software	"Data Protection"
+		Chance		0.3
+		}
+		{
+		Software	"Network Security Suite"
+		Chance		0.3
+		}
+		{
+		Software	"SIEM"
+		Chance		0.2
+		}
+	]
+}

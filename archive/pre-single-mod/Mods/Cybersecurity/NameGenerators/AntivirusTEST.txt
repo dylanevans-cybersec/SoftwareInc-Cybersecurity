@@ -1,0 +1,81 @@
+-start(prefix)
+-prefix(core)
+Virus
+Malware
+Trojan
+Worm
+Nano
+Micro
+Byte
+Bit
+Cyber
+Clean
+Pure
+Safe
+Secure
+Ultra
+Quantum
+Doctor
+Professor
+Captain
+Major
+Anti
+Super
+Mega
+Omni
+Corporate
+Trusted
+Legacy
+Sneeze
+Laughing
+Sneaky
+Suspicious
+-core(suffix,end)
+Guard
+Shield
+Scanner
+Scan
+Defender
+Protector
+Sentinel
+Watcher
+Monitor
+Cleaner
+Scrubber
+Vaccine
+Antidote
+Cure
+Zapper
+Destroyer
+Eliminator
+Remover
+Eradicator
+Antivirus
+AV
+Thing
+System
+Bot
+-suffix(end)
+ AV
+ Pro
+ Plus
+ Max
+ Ultra
+ Advanced
+ Supreme
+ Ultimate
+ Enterprise
+ Business Edition
+ Home Edition
+ Family Pack
+ 360
+ Total
+ Complete
+ NextGen
+ for Humans
+ for Professionals
+ of Cleanliness
+ McScanface
+ Deluxe
+ SE
+-end(stop)

@@ -1,0 +1,347 @@
+SoftwareType
+{
+	Name	"Data Protection"
+	Description	"Keep data from leaking, keep it recoverable when things go wrong, and keep it unreadable when it is stolen."
+	Unlock	1990
+	Random	0.1
+	OptimalDevTime	56
+	OneClient	False
+	InHouse	True
+	OSSupport	[ Computer; Phone ]
+	NameGenerator	DataProtection
+	SubmarketNames	[ Protection; Recoverability; Compliance ]
+	Categories
+	[
+		{
+			Name	"Backup & Recovery"
+			Description	"Copy everything somewhere safe so that yesterday is always available"
+			Unlock	1990
+			Popularity	0.9
+			Submarkets	[ 2; 5; 2 ]
+			TimeScale	0.74
+			Retention	48
+			IdealPrice	120
+			Iterative	0.8
+		}
+		{
+			Name	"Encryption & DLP"
+			Description	"Make stolen data unreadable, and stop confidential data walking out of the building"
+			Unlock	1996
+			Popularity	0.7
+			Submarkets	[ 5; 0; 5 ]
+			TimeScale	1
+			Retention	42
+			IdealPrice	500
+			Iterative	0.75
+		}
+	]
+	Features
+	[
+		{
+			Name	"Data Engine"
+			Spec	System
+			Description	"The engine that inspects, copies or scrambles data"
+			DevTime	10
+			CodeArt	1
+			Submarkets	[ 3; 2; 2 ]
+			Features
+			[
+				{
+					Name	"Incremental Backup"
+					Description	"Only copy what changed since last night"
+					Unlock	1990
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 0; 4; 1 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	Deduplication
+					Description	"Store each block once, however many times it appears"
+					Unlock	2005
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 0; 3; 0 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Continuous Data Protection"
+					Description	"Restore to any second, not just to last night"
+					Unlock	2010
+					Level	2
+					DevTime	9
+					CodeArt	1
+					Submarkets	[ 0; 5; 0 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Immutable Backups"
+					Description	"Backups that ransomware cannot touch"
+					Unlock	2016
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 2; 5; 1 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"File & Folder Encryption"
+					Description	"Lock the files that matter"
+					Unlock	1996
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 4; 1; 1 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Full Disk Encryption"
+					Description	"If the laptop is stolen, the data is not"
+					Unlock	1998
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 5; 0; 1 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Key Management"
+					Description	"Encryption is only as good as where the keys live"
+					Unlock	2004
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 1; 3 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"TPM Integration"
+					Description	"Let the hardware guard the keys"
+					Unlock	2007
+					Level	2
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 1 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Content Inspection"
+					Description	"Read every outgoing file for things that should not leave"
+					Unlock	2004
+					Level	1
+					DevTime	6
+					CodeArt	1
+					Submarkets	[ 4; 0; 2 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Data Classification"
+					Description	"Label everything as public, internal or very secret"
+					Unlock	2007
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 3; 0; 4 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Endpoint Enforcement"
+					Description	"Stop the copy to the USB stick before it starts"
+					Unlock	2008
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 0; 2 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Backup Data Mining"
+					Description	"Index every customer backup and sell the 'insights'. <b><color=#FF0000>+{Currency:0.05} per user per day.</color></b>"
+					Unlock	2009
+					Level	3
+					DevTime	4
+					CodeArt	1
+					Submarkets	0
+					SoftwareCategories	[ "Backup & Recovery" ]
+					Script_EndOfDay	"if (Product.GetVar(\"BackupMining\", true)) { Product.DevCompany.MakeTransaction(Product.Userbase * 0.05, Deals, \"Backup Insight Sales\"); if (Random() * Product.Userbase > 900000 * Product.Category.Popularity) { LaunchLawsuit(\"BackupMining\", Product.Sum * 0.5, 0.5); Product.DevCompany.AddFans(-Product.Userbase * 0.5, Product.Category); Product.ChangeUserbase(Product.Userbase * 0.4); Product.KillAwareness(); Product.PutVar(\"BackupMining\", false); AddPopup(Localize(\"BackupMiningNotification\", Product.Name), 1, \"Exclamation\", Issue); } }"
+				}
+			]
+		}
+		{
+			Name	"Transport & Storage"
+			Spec	Network
+			Description	"Where the data goes, and where the copies live"
+			DevTime	7
+			CodeArt	1
+			Submarkets	[ 2; 3; 2 ]
+			Features
+			[
+				{
+					Name	"Offsite Replication"
+					Description	"A copy in a different building, ideally a different flood plain"
+					Unlock	1998
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 0; 4; 0 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Disaster Recovery Failover"
+					Description	"Switch to the copy while the original is on fire"
+					Unlock	2008
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 0; 5; 1 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Cloud Backup Target"
+					Description	"Somebody else stores the tapes now"
+					Unlock	2009
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Server	0.0004
+					Submarkets	[ 0; 3; 1 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Secure File Transfer"
+					Description	"Send a file without sending a plaintext copy to everyone in between"
+					Unlock	2002
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 3; 1; 1 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Encrypted Cloud Sync"
+					Description	"Sync across devices, with keys the cloud never sees"
+					Unlock	2012
+					Level	2
+					DevTime	7
+					CodeArt	1
+					Server	0.0003
+					Submarkets	[ 3; 3; 0 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Email Monitoring"
+					Description	"Read outgoing mail for secrets"
+					Unlock	2005
+					Level	1
+					DevTime	5
+					CodeArt	1
+					Submarkets	[ 2; 0; 4 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Network DLP Gateway"
+					Description	"Inspect traffic at the door"
+					Unlock	2006
+					Level	2
+					DevTime	8
+					CodeArt	1
+					Submarkets	[ 4; 0; 2 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+			]
+		}
+		{
+			Name	Console
+			Spec	2D
+			Description	"Schedules, restore wizards and policy screens"
+			DevTime	5
+			CodeArt	0.3
+			Submarkets	[ 1; 2; 3 ]
+			Features
+			[
+				{
+					Name	"Backup Scheduler"
+					Description	"Run the backups when nobody is looking"
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 0; 4; 0 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Restore Wizard"
+					Description	"Get the file back in three clicks"
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 5; 0 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Recovery Test Reports"
+					Description	"Prove the backups actually restore"
+					Unlock	2010
+					Level	1
+					DevTime	4
+					CodeArt	0.3
+					Submarkets	[ 0; 1; 4 ]
+					SoftwareCategories	[ "Backup & Recovery" ]
+				}
+				{
+					Name	"Encryption Status Dashboard"
+					Description	"Which machines are encrypted, and which are lying about it"
+					Unlock	2003
+					Level	1
+					DevTime	4
+					CodeArt	0.3
+					Submarkets	[ 1; 0; 4 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Self-Service Recovery"
+					Description	"Let people recover their own locked laptop"
+					Unlock	2011
+					Level	1
+					DevTime	4
+					CodeArt	0.4
+					Submarkets	[ 0; 3; 2 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Policy Builder"
+					Description	"Describe what may not leave, in plain words"
+					Unlock	2005
+					Level	1
+					DevTime	5
+					CodeArt	0.4
+					Submarkets	[ 1; 0; 4 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Incident Review Queue"
+					Description	"A list of near-misses with a human in the loop"
+					Unlock	2006
+					Level	1
+					DevTime	4
+					CodeArt	0.3
+					Submarkets	[ 1; 0; 4 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+				{
+					Name	"Compliance Reporting"
+					Description	"Prove to a regulator that the controls exist"
+					Unlock	2004
+					Level	1
+					DevTime	5
+					CodeArt	0.3
+					Submarkets	[ 0; 0; 5 ]
+					SoftwareCategories	[ "Encryption & DLP" ]
+				}
+			]
+		}
+	]
+}
