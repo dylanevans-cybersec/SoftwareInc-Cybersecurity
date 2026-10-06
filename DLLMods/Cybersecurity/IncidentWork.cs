@@ -18,15 +18,17 @@ namespace CybersecurityMod
         public int Threat;          // index into CyberBehaviour's threat table
         public int StartDay;
         public int DeadlineDay;
+        public float Work;          // response points needed: the threat's base work scaled for the company when it started
         public float Progress;      // 0..1
         public bool Warned;
 
-        public IncidentWork(int threat, int startDay, int deadlineDay)
+        public IncidentWork(int threat, int startDay, int deadlineDay, float work)
             : base(CyberBehaviour.ThreatName(threat), null, 0u, null, -1)
         {
             Threat = threat;
             StartDay = startDay;
             DeadlineDay = deadlineDay;
+            Work = work > 0f ? work : CyberBehaviour.ThreatWork(threat);
         }
 
         // ---------------- who can work on it ----------------
@@ -61,7 +63,7 @@ namespace CybersecurityMod
 
             // Utilities.PerDay(x, ...) spreads x over a game month, so scale the per-day rate up first.
             float points = Utilities.PerDay(pointsPerDay * GameSettings.DaysPerMonth * skill * effectiveness * actor.GetPCAddonBonus(Employee.EmployeeRole.Service), delta, true);
-            Progress += points / CyberBehaviour.ThreatWork(Threat);
+            Progress += points / Work;
 
             if (Progress >= 1f)
             {

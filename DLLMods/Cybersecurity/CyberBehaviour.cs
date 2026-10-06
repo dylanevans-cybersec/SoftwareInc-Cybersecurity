@@ -53,6 +53,7 @@ namespace CybersecurityMod
         public int Threat;
         public int StartDay;
         public int DeadlineDay;
+        public float Work;          // response points needed (already scaled for the company when the incident started)
         public float Progress;      // 0..1
         public bool Warned;
         public List<string> Teams;
@@ -82,6 +83,21 @@ namespace CybersecurityMod
         private const float DamagePerUser = 0.10f;
         private const float MaxDamage = 3000000f;
         private const int WarnDaysBeforeDeadline = 2;
+
+        // How hard an incident is scales with how prominent the company is (business reputation and fans): the work a
+        // threat needs is multiplied by 1 at no reputation and no fans, up to MaxWorkScale at full reputation and
+        // FansScale x 10^FansLogRange fans. Fixed when the incident starts. Deadlines do not scale.
+        private const float MaxWorkScale = 5f;
+        private const float ReputationWeight = 0.5f;       // share of the prominence that comes from business reputation
+        private const float FansWeight = 0.5f;             // share that comes from fans
+        private const float FansScale = 10000f;            // fans at which the fans factor reaches log10(2) / FansLogRange
+        private const float FansLogRange = 3f;             // decades of fans above FansScale for the full effect (10M fans)
+
+        // The lawsuit an unanswered incident causes gets harder with the company's active users. Its difficulty (0-1) is
+        // the stars of reputation lost on a defeat (half on a win) and adds up to 25% to the lawsuit's length.
+        // It equals the threat's own difficulty at about 200k users, half of it with almost none, 1.5x at 20M users.
+        private const float UsersLogRange = 4f;            // decades of users above UsersScale for the full effect (20M users)
+        private const float LawsuitMinShare = 0.5f;        // share of the threat's difficulty with no users at all
 
         public static CyberBehaviour Current;
 
@@ -366,6 +382,41 @@ namespace CybersecurityMod
             return Math.Min(chance, MaxChancePerDay);
         }
 
+        // ---------------- difficulty scaling ----------------
+
+        // 0 with no fans, 1 at FansScale x 10^FansLogRange fans (a log scale, like the user factor above).
+        private static float FansFactor(Company company)
+        {
+            double fans = company.Fans;
+            return Mathf.Clamp01((float)(Math.Log10(1.0 + fans / FansScale) / FansLogRange));
+        }
+
+        // 0..1 from business reputation and fans together.
+        private static float Prominence(Company company)
+        {
+            float reputation = Mathf.Clamp01(company.BusinessReputation);
+            return Mathf.Clamp01(ReputationWeight * reputation + FansWeight * FansFactor(company));
+        }
+
+        // Multiplier on a threat's work: 1 for an unknown company, MaxWorkScale for a famous one.
+        private static float WorkScale(Company company)
+        {
+            return 1f + (MaxWorkScale - 1f) * Prominence(company);
+        }
+
+        // 0..1 from the company's total active users (log scale, 20M users = 1).
+        private static float UserFactor(double users)
+        {
+            if (users <= 0) return 0f;
+            return Mathf.Clamp01((float)(Math.Log10(1.0 + users / UsersScale) / UsersLogRange));
+        }
+
+        // Difficulty of the lawsuit an unanswered incident causes: the threat's own value scaled by the users.
+        private static float LawsuitDifficulty(ThreatDef def, double users)
+        {
+            return Mathf.Clamp01(def.Difficulty * (LawsuitMinShare + UserFactor(users)));
+        }
+
         private void MaybeStartIncident(GameSettings gs)
         {
             if (Frequency <= 0f) return;
@@ -411,14 +462,18 @@ namespace CybersecurityMod
         private void StartIncident(GameSettings gs, int threat)
         {
             ThreatDef def = Threats[threat];
-            IncidentWork incident = new IncidentWork(threat, _dayCounter, _dayCounter + def.DeadlineDays);
+            float scale = WorkScale(gs.MyCompany);
+            IncidentWork incident = new IncidentWork(threat, _dayCounter, _dayCounter + def.DeadlineDays, def.Work * scale);
             gs.MyCompany.AddWorkItem(incident);
             gs.ApplyDefaultTeams(incident, IncidentTeamKey);
             _incidents.Add(incident);
             _lastIncidentDay = _dayCounter;
-            Log("incident started: " + def.Name + " on day " + _dayCounter + ", deadline day " + incident.DeadlineDay + " (" + _incidents.Count + " open)");
+            Log("incident started: " + def.Name + " on day " + _dayCounter + ", deadline day " + incident.DeadlineDay + " (" + _incidents.Count + " open); work "
+                + incident.Work.ToString("0.0") + " = " + def.Work.ToString("0.0") + " x " + scale.ToString("0.00")
+                + " (reputation " + gs.MyCompany.BusinessReputation.ToString("0.00") + ", fans " + gs.MyCompany.Fans + ")");
 
-            Popup(def.Intro + " You have " + def.DeadlineDays + " days to respond. Assign a Service team to it; staff with Support training work fastest.", PopupManager.NotificationSound.Issue, 1f);
+            string bigger = scale >= 1.05f ? " A company as well known as yours draws a harder attack (x" + scale.ToString("0.0") + " the usual response)." : "";
+            Popup(def.Intro + " You have " + def.DeadlineDays + " days to respond." + bigger + " Assign a Service team to it; staff with Support training work fastest.", PopupManager.NotificationSound.Issue, 1f);
         }
 
         // Once a day: fail the incidents that are past their deadline and warn about the ones running late.
@@ -537,8 +592,10 @@ namespace CybersecurityMod
         {
             double users = ActiveUsers(gs.MyCompany);
             double amount = def.Damage * Math.Min(MaxDamage, Math.Max(MinDamage, users * DamagePerUser));
-            gs.LaunchSuit(new GameSettings.Lawsuit(def.SubjectKey, amount, def.Difficulty), false);
-            Log("lawsuit queued: " + def.SubjectKey + ", " + (int)amount + " (users " + (int)users + ")");
+            float difficulty = LawsuitDifficulty(def, users);
+            gs.LaunchSuit(new GameSettings.Lawsuit(def.SubjectKey, amount, difficulty), false);
+            Log("lawsuit queued: " + def.SubjectKey + ", " + (int)amount + ", difficulty " + difficulty.ToString("0.00")
+                + " (threat base " + def.Difficulty.ToString("0.00") + ", users " + (int)users + ")");
             Popup(def.Name + " was not contained in time. Affected customers are suing.", PopupManager.NotificationSound.Issue, 1f);
         }
 
@@ -575,8 +632,8 @@ namespace CybersecurityMod
                 flat.Add(incident.Threat);
                 flat.Add(incident.StartDay);
                 flat.Add(incident.DeadlineDay);
-                flat.Add(ThreatWork(incident.Threat));                          // kept so the layout matches older saves
-                flat.Add(incident.Progress * ThreatWork(incident.Threat));      // in response points, as older saves had it
+                flat.Add(incident.Work);                                        // response points needed (scaled for the company)
+                flat.Add(incident.Progress * incident.Work);                    // response points done, as older saves had it
                 flat.Add(incident.Warned ? 1f : 0f);
 
                 string names = "";
@@ -612,6 +669,7 @@ namespace CybersecurityMod
                 record.StartDay = (int)flat[i + 1];
                 record.DeadlineDay = (int)flat[i + 2];
                 float work = flat[i + 3] > 0f ? flat[i + 3] : ThreatWork(threat);
+                record.Work = work;
                 record.Progress = Mathf.Clamp01(flat[i + 4] / work);
                 record.Warned = flat[i + 5] > 0.5f;
 
@@ -631,7 +689,7 @@ namespace CybersecurityMod
             for (int i = 0; i < _pending.Count; i++)
             {
                 IncidentRecord record = _pending[i];
-                IncidentWork incident = new IncidentWork(record.Threat, record.StartDay, record.DeadlineDay);
+                IncidentWork incident = new IncidentWork(record.Threat, record.StartDay, record.DeadlineDay, record.Work);
                 incident.Progress = record.Progress;
                 incident.Warned = record.Warned;
                 gs.MyCompany.AddWorkItem(incident);
