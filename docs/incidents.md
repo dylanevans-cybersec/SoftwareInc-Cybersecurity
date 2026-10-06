@@ -12,12 +12,38 @@ Why not a new one: an earlier version appended `Cybersecurity` to `Employee.Serv
 
 ## Threats
 
-| Threat | From | Deadline | Work | Lawsuit size | Lawsuit difficulty |
+| Threat | From | Deadline | Base work | Lawsuit size | Base lawsuit difficulty |
 |---|---|---|---|---|---|
 | Ransomware | 2005 | 7 days | 24 | x1.5 | 0.6 |
 | Phishing campaign | 1998 | 10 days | 12 | x0.6 | 0.4 |
 | Data breach | 1990 | 14 days | 28 | x2.0 | 0.7 |
 | DDoS attack | 1999 | 4 days | 8 | x0.5 | 0.4 |
+
+Base work and base lawsuit difficulty are what a newcomer faces; both are scaled for the company (next section). Deadlines are fixed.
+
+## Scaling with the company
+
+**Incident work** grows with the company's business reputation and fans (constants at the top of `CyberBehaviour.cs`):
+
+```
+fansFactor  = clamp01( log10(1 + fans / 10,000) / 3 )              10M fans = 1
+prominence  = 0.5 x businessReputation + 0.5 x fansFactor           0..1
+workScale   = 1 + 4 x prominence                                    x1 .. x5   (MaxWorkScale = 5)
+work        = base work x workScale                                 fixed when the incident starts
+```
+
+`fans` is `Company.Fans` (all categories together). A company with no reputation and no fans faces exactly the base work. Examples: reputation 0.5 with 100k fans is about x2.7; reputation 1.0 with 10M fans is x5. The work is stored per incident (in the save too), so a mid-incident change in reputation or fans does not move the bar. The deadline does not change, so a bigger company needs a proportionally bigger response team: ransomware at x5 is 120 points in 7 days.
+
+**Lawsuit difficulty** grows with the company's current active users (the same `users` as in Likelihood), evaluated when the lawsuit is launched:
+
+```
+userFactor        = clamp01( log10(1 + users / 2000) / 4 )          20M users = 1
+lawsuitDifficulty = clamp01( base difficulty x (0.5 + userFactor) )
+```
+
+That is half the base difficulty with almost no users, exactly the base at about 200k users, 1.25x at 2M and 1.5x at 20M (capped at 1). What the game does with the difficulty (`LegalWork.Backlash` and `InitTimeline`): a defeat costs that many stars of business reputation, a win costs half as much, and the lawsuit lasts up to 25% longer at 1 than at 0. The lawsuit's work bar and length mostly come from its *amount*, which already scales with users (see Response), so difficulty mainly adds reputation damage.
+
+The `[Cybersecurity]` log shows the inputs each time: `incident started ... work 52.8 = 24.0 x 2.20 (reputation 0.41, fans 250000)` and `lawsuit queued ..., difficulty 0.72 (threat base 0.60, users 3200000)`. The fan scale (`FansScale`, `FansLogRange`) is a first guess; adjust it from real fan numbers in those lines.
 
 ## Likelihood
 
